@@ -3,6 +3,7 @@ package co.kr.shopping.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,8 +12,8 @@ import org.springframework.stereotype.Service;
 
 import co.kr.shopping.dao.UserRepository;
 import co.kr.shopping.utils.SecurityUser;
-import co.kr.shopping.utils.User;
 import co.kr.shopping.utils.UserDetailsImpl;
+import co.kr.shopping.vo.MemberVO;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService{
@@ -28,12 +29,14 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		User user = this.userRepository.findByUsername(username);
-		if(user == null) {
+		MemberVO member = userRepository.findIdByUsername(username); 
+		if(member == null) {
 			throw new UsernameNotFoundException("해당하는 사용자가 없습니다.");
-		}else {
-			UserDetailsImpl userPrincipal = new UserDetailsImpl(user);
-			return userPrincipal;
 		}
+		return User.builder()
+			.username(member.getUsername())
+			.password(member.getPassword())
+			.roles(member.getRole().toString())
+			.build();
 	}
 }

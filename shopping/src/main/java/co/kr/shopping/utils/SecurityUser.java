@@ -3,7 +3,7 @@ package co.kr.shopping.utils;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 
-import co.kr.shopping.vo.Member;
+import co.kr.shopping.vo.MemberVO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 public class SecurityUser extends User{
 	
-	private Member member;
+	private MemberVO member;
 	
-	public SecurityUser(Member member) {
+	public SecurityUser(MemberVO member) {
 		super(  member.getUsername()
 			  , member.getPassword()
 			  , AuthorityUtils.createAuthorityList(member.getRole().toString()
