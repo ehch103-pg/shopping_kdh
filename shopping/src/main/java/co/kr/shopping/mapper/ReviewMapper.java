@@ -1,4 +1,4 @@
-package co.kr.shopping.dao;
+package co.kr.shopping.mapper;
 
 import java.util.List;
 import java.util.Map;
@@ -10,7 +10,7 @@ import co.kr.shopping.vo.PaginationVO;
 import co.kr.shopping.vo.ReviewVO;
 
 @Mapper
-public interface ReviewDAO {
+public interface ReviewMapper {
 	
 	public List<ReviewVO> selectReviewList(@Param("keyword") Map<String, Object> keyword, @Param("paging") PaginationVO page);
 	

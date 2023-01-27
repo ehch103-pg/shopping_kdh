@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">  
+
+<mapper namespace="co.kr.shopping.mapper.MemberMapper">
+	<select id="selectMemberInfo" resultType="co.kr.shopping.vo.MemberVO">
+		SELECT *
+		  FROM member
+		 WHERE member_id = #{ userID }
+	</select>
+	
+	<insert id="insertMember" parameterType="co.kr.shopping.vo.MemberVO">
+		INSERT INTO member
+		(member_Id, member_Pw, member_Email, member_regDate, member_name, member_gen, member_chDate)
+		VALUES 
+		(#{mem_id}, #{mem_pw}, #{mem_email},now(), #{mem_name}, #{mem_gen}, now())
+	</insert>
+	
+	
+</mapper>

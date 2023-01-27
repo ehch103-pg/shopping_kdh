@@ -1,8 +1,6 @@
 package co.kr.shopping.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,37 +8,33 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import co.kr.shopping.dao.UserRepository;
 import co.kr.shopping.service.MemberService;
+import co.kr.shopping.vo.MemberVO;
 
-@Controller("/member")
+@Controller
 public class memberController {
 	
 	@Autowired
 	MemberService memberService;
 	
-	@GetMapping("/memberReg")
+	@GetMapping("/member/memberReg")
 	public String registerMem(Model model) {
 		return "member/memberReg";
 	}
 	
-	@PostMapping("/memberRegProc")
-	public Map<String, Object> memberInsert(@RequestParam Map<String, Object> param){
-		SimpleDateFormat simpledate = new SimpleDateFormat("yyyy-MM-dd");
+	@PostMapping("/member/memberRegProc")
+	@ResponseBody
+	public int memberInsert(@RequestBody Map<String, Object> param){
+		System.out.println("1111");
+		String mem_id = (String)param.getOrDefault("mem_id", "");
+		MemberVO member = new MemberVO();
+		int count = 1; 
+//				memberService.insertMember(member);
 		
-		String mem_id = (String) param.getOrDefault("mem_id", "");
-		String mem_pw = (String) param.getOrDefault("mem_pw", "");
-		String mem_email = (String)param.getOrDefault("mem_email", "");
-		String mem_regDate = simpledate.format(new Date());
-		String mem_name = (String) param.getOrDefault("mem_name", "");
-		String mem_gen = (String) param.getOrDefault("mem_gen", "");
-		
-		String Chdate = simpledate.format(new Date());
-		
-		Map<String, Object> result = new HashMap<>();
-		int count = user
-		return result;
+		return count;
 	}
 }

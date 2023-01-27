@@ -23,7 +23,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 				Authentication authentication) throws IOException, ServletException
 		{
-			setDefaultTargetUrl("/");
+			setDefaultTargetUrl("/home");
 			SavedRequest savedRequest = requestCache.getRequest(request, response);
 			
 			if (savedRequest == null) {

@@ -7,7 +7,7 @@
 <title>로그인</title>
 </head>
 <body>
-   <form action="/loginProc" method="post">
+   <form name="loginFrm" action="/loginProc" method="post">
 	<div>
 	  <div>
 		<label class="class-label-wrapper">아이디: </label>

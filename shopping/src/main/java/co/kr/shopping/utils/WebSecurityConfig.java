@@ -9,12 +9,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -23,12 +27,12 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
-import co.kr.shopping.dao.UserRepository;
-import co.kr.shopping.service.UserDetailsServiceImpl;
 
 @Configuration
 public class WebSecurityConfig {
 	
+	private CustomSuccessHandler customSuccessHandler;
+	private CustomFailureHandler customFailureHandler;
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -41,8 +45,8 @@ public class WebSecurityConfig {
 				.loginProcessingUrl("/loginProc")
 				.usernameParameter("username")
 				.passwordParameter("password")
-				.successHandler(new CustomSuccessHandler())
-				.failureHandler(new CustomFailureHandler())
+				.successHandler(customSuccessHandler)
+				.failureHandler(customFailureHandler)
 			.and().logout()
 			.and().csrf().disable();
 		
@@ -51,11 +55,19 @@ public class WebSecurityConfig {
 	
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
-		return new BCryptPasswordEncoder();
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 	
 	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return web -> web.ignoring().antMatchers("/resources/**");
+	@Order(0)
+	public SecurityFilterChain  resources(HttpSecurity http) throws Exception {
+		return http.requestMatchers(matchers -> matchers
+				.antMatchers("/resources/**"))
+				.authorizeHttpRequests(authorize -> authorize
+				.anyRequest().permitAll())
+				.requestCache(RequestCacheConfigurer::disable)
+			    .securityContext(AbstractHttpConfigurer::disable)
+			    .sessionManagement(AbstractHttpConfigurer::disable)
+				.build();
 	}
 }
