@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class HomeController {
 	
-	@GetMapping
-	public String beforeLogin() {
-		return "redirect:/login";
+	@GetMapping("/")
+	public String main() {
+		return "index";
 	}
 	
 	@GetMapping("/login")
@@ -23,11 +23,9 @@ public class HomeController {
 		return "login";
 	}
 	
-	@GetMapping("/home")
-	public String index(Model model) {
-		return "index";
+	@GetMapping("/member/memberReg")
+	public String register() {
+		return "member/memberReg";
 	}
-	
-	
 
 }

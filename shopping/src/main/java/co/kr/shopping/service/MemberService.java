@@ -18,28 +18,28 @@ import co.kr.shopping.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class MemberService implements UserDetailsService{
 	
-	@Autowired
 	private final MemberMapper memberMapper;
+	private final PasswordEncoder passwordEncoder;
 	
-	@Transactional
-	public int insertMember(MemberVO member) {
-		int count = 0;
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		member.setMemberPw(passwordEncoder.encode(member.getPassword()));
-		
-		count = memberMapper.insertMember(member);
-		return count;
+	public MemberService(MemberMapper memberMapper, PasswordEncoder passwordEncoder) {
+		// TODO Auto-generated constructor stub
+		this.memberMapper = memberMapper;
+		this.passwordEncoder = passwordEncoder;
 	}
-
+	
+	public void save(MemberVO.SaveRequest member) {
+		member.setPassword(passwordEncoder.encode(member.getPassword()));
+		memberMapper.save(member.toEntity());
+	}
+	
 	@Override
+	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		MemberVO member = memberMapper.selectMemberInfo(username);
-		if(member == null)
-			throw new UsernameNotFoundException("User not authorized.");
-		return member;
+		return null;
 	}
+	
+
 }

@@ -10,7 +10,7 @@
 <body>
 	<h1> 회원가입 </h1>
 	<div class="member-div">
-	 <form name="memFrm" id="memFrm" method="post">
+	 <form name="memFrm" id="memFrm" method="post" action="/member/memberRegProc">
 	  <div class="member-div-element">
 		<label>아이디: </label>
 		<input type="text" id="mem_id" name="mem_id"> 
@@ -34,40 +34,10 @@
 	  	 <option value="F">여성</option>
 	  	</select>
 	  </div>
-	  <button type="button" id="regBtn">가입</button>
+	  <button>가입</button>
 	  <button type="reset">취소</button>
 	 </form>
 	</div>
   <script src="http://code.jquery.com/jquery-latest.js"></script> 	
-  <script type="text/javascript">
-  	$("#regBtn").on("click", function(){
-  		let mem_id = $("#mem_id").val();
-  		let mem_pw = $("#mem_pw").val();
-  		let mem_email = $("#mem_email").val();
-  		let mem_name = $("#mem_name").val();
-  		let mem_gen = $("[id=mem_gen] :selected").val();
-  		
-  		let data = { 'mem_id' : mem_id, 'mem_pw' : mem_pw, 'mem_email': mem_email, 'mem_name': mem_name, 'mem_gen': mem_gen  }
-  		
-  		$.ajax({
-  			  type : 'post'
-  			, url  : '/member/memberRegProc'
-  			, data : JSON.stringify(data)
-  			, dataType : 'text'
-  			, success : function(result){
-  				 console.log(result);
-  				 if(result == 1){
-  					 alert('회원가입이 되었습니다. 환영합니다.');
-  					 location.href('/login');
-  				 }else {
-  					 alert('회원가입이 정상적으로 처리가 되지 않았습니다.');
-  				 }
-  			  }
-  			, error : function(xhr){
-  				console.log(xhr);	
-  			}
-  		});
-  	});
-  </script>
 </body>
 </html>

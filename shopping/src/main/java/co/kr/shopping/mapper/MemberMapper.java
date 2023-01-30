@@ -1,20 +1,9 @@
 package co.kr.shopping.mapper;
 
-import java.util.Map;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
+import org.springframework.data.repository.CrudRepository;
 import co.kr.shopping.vo.MemberVO;
 
-@Mapper
-public interface MemberMapper {
+public interface MemberMapper extends CrudRepository<MemberVO, Long>  {
 		
-	MemberVO selectMemberInfo(@Param("userID") String userID);
-	
-	int insertMember(MemberVO member);
-
-	int updateMember(@Param("param") Map<String, Object> param);
-	
-	
 }

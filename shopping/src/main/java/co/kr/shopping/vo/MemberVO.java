@@ -1,63 +1,65 @@
 package co.kr.shopping.vo;
 
+import java.beans.Transient;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import co.kr.shopping.utils.MemberAuthority;
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-public class MemberVO implements UserDetails {
-	private int memberSeq;
-	private String memberId;
-	private String memberPw;
-	private String memberEmail;
-	private String memberRegDate;
-	private String memberName;
-	private String memberGen;
-	private String memberRole;
+@NoArgsConstructor
+@Entity
+@Getter
+public class MemberVO {
 	
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return Collections.singletonList(new SimpleGrantedAuthority(this.getMemberRole()));
-	}
-	@Override
-	public String getPassword() {
-		// TODO Auto-generated method stub
-		return this.memberPw;
-	}
-	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		return this.memberId;
+	@Id
+	private String Id;
+	private String Password;
+	private MemberAuthority memberAuthority;
+	
+	@Builder
+	public MemberVO(String Id, String Password, MemberAuthority memberAuthority) {
+		this.Id = Id;
+		this.Password = Password;
+		this.memberAuthority = memberAuthority;
 	}
 	
-	public String getName() {
-		return this.memberName;
-	}
+	 @Getter
+	 @Setter
+	 @NoArgsConstructor
+	 public static class SaveRequest {
+	    private String id;
+	    private String password;
+	    private MemberAuthority authority;
+
+	    @Transient
+	    public MemberVO toEntity() {
+	      return MemberVO.builder()
+	    		  .Id(this.id)
+	    		  .Password(this.password)
+	    		  .memberAuthority(this.authority)
+	    		  .build();
+	        }
+	    }
 	
-	@Override
-	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-	@Override
-	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-	@Override
-	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-	@Override
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return true;
-	}
 }

@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
@@ -27,26 +29,31 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
+import lombok.RequiredArgsConstructor;
+
 
 @Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class WebSecurityConfig {
 	
-	private CustomSuccessHandler customSuccessHandler;
+	private AuthenticationSuccessHandler customSuccessHandler;
 	private CustomFailureHandler customFailureHandler;
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
 			.authorizeRequests()
-			.antMatchers("/home", "/login", "/loginFail", "/member/memberReg").permitAll()
+			.antMatchers("/", "/login", "/loginFail", "/member/memberReg").permitAll()
 			.anyRequest().authenticated()
 			.and().formLogin()
 				.loginPage("/login")
 				.loginProcessingUrl("/loginProc")
 				.usernameParameter("username")
 				.passwordParameter("password")
-				.successHandler(customSuccessHandler)
-				.failureHandler(customFailureHandler)
+				.defaultSuccessUrl("/")
+				.failureUrl("/login")
 			.and().logout()
 			.and().csrf().disable();
 		
