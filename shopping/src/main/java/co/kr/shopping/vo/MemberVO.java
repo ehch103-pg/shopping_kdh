@@ -1,65 +1,62 @@
 package co.kr.shopping.vo;
 
-import java.beans.Transient;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import co.kr.shopping.utils.MemberAuthority;
-import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@NoArgsConstructor
-@Entity
-@Getter
-public class MemberVO {
+@Data
+public class MemberVO implements UserDetails{
+	private int memSeq;
+	private String memId;
+	private String memPw;
+	private String memEmail;
+	private String memName;
+	private String regDate;
+	private String memGen;
+	private String role;
+	private String chId;
+	private String delYn;
+	private String delTime;
 	
-	@Id
-	private String Id;
-	private String Password;
-	private MemberAuthority memberAuthority;
-	
-	@Builder
-	public MemberVO(String Id, String Password, MemberAuthority memberAuthority) {
-		this.Id = Id;
-		this.Password = Password;
-		this.memberAuthority = memberAuthority;
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return Collections.singletonList(new SimpleGrantedAuthority(this.role));
 	}
-	
-	 @Getter
-	 @Setter
-	 @NoArgsConstructor
-	 public static class SaveRequest {
-	    private String id;
-	    private String password;
-	    private MemberAuthority authority;
-
-	    @Transient
-	    public MemberVO toEntity() {
-	      return MemberVO.builder()
-	    		  .Id(this.id)
-	    		  .Password(this.password)
-	    		  .memberAuthority(this.authority)
-	    		  .build();
-	        }
-	    }
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return this.memPw;
+	}
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return this.memId;
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 	
 }

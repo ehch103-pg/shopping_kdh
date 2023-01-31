@@ -29,6 +29,7 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
+import co.kr.shopping.service.MemberService;
 import lombok.RequiredArgsConstructor;
 
 
@@ -38,36 +39,42 @@ import lombok.RequiredArgsConstructor;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class WebSecurityConfig {
 	
-	private AuthenticationSuccessHandler customSuccessHandler;
-	private CustomFailureHandler customFailureHandler;
+	@Autowired
+	private MemberService memberService;
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
-			.authorizeRequests()
-			.antMatchers("/", "/login", "/loginFail", "/member/memberReg").permitAll()
-			.anyRequest().authenticated()
-			.and().formLogin()
-				.loginPage("/login")
-				.loginProcessingUrl("/loginProc")
-				.usernameParameter("username")
-				.passwordParameter("password")
-				.defaultSuccessUrl("/")
-				.failureUrl("/login")
-			.and().logout()
-			.and().csrf().disable();
-		
-		return httpSecurity.build();
+        .authorizeRequests() // 요청에 대한 권한 설정
+        .antMatchers("/login", "/member/memberReg","/memberRegProc","/loginFail").permitAll()
+        .antMatchers("/loginSuccess").hasRole("USER")
+        .antMatchers("/loginSuccess").hasRole("ADMIN")
+        .anyRequest().authenticated();
+
+		httpSecurity
+        .formLogin() // Form Login 설정
+            .loginPage("/login")
+            .loginProcessingUrl("/loginProc")
+            .defaultSuccessUrl("/")
+            .failureUrl("/login")
+            .usernameParameter("username")
+            .passwordParameter("password")
+        .and()
+            .logout()
+        .and()
+            .csrf().disable();
+
+    return httpSecurity.build();
 	}
 	
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
-		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		return new BCryptPasswordEncoder(); 
 	}
 	
 	@Bean
 	@Order(0)
-	public SecurityFilterChain  resources(HttpSecurity http) throws Exception {
+	public SecurityFilterChain resources(HttpSecurity http) throws Exception {
 		return http.requestMatchers(matchers -> matchers
 				.antMatchers("/resources/**"))
 				.authorizeHttpRequests(authorize -> authorize

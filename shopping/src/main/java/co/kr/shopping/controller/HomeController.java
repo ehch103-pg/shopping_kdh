@@ -23,6 +23,11 @@ public class HomeController {
 		return "login";
 	}
 	
+	@PostMapping("/loginProc")
+	public String loginProc() {
+		return null;
+	}
+	
 	@GetMapping("/member/memberReg")
 	public String register() {
 		return "member/memberReg";

@@ -10,7 +10,7 @@
 <body>
 	<h1> 회원가입 </h1>
 	<div class="member-div">
-	 <form name="memFrm" id="memFrm" method="post" action="/member/memberRegProc">
+	 <form name="memFrm" id="memFrm" action="/memberRegProc" method="post">
 	  <div class="member-div-element">
 		<label>아이디: </label>
 		<input type="text" id="mem_id" name="mem_id"> 
@@ -29,13 +29,13 @@
 	  </div>
 	  <div>
 	  	<label>성별: </label>
-	  	<select id="mem_gen">
-	  	 <option value="M">남성</option>
+	  	<select id="mem_gen" name="mem_gen">
+	  	 <option value="M" selected>남성</option>
 	  	 <option value="F">여성</option>
 	  	</select>
 	  </div>
-	  <button>가입</button>
-	  <button type="reset">취소</button>
+	  <input type="submit" id="regBtn">
+	  <input type="reset">
 	 </form>
 	</div>
   <script src="http://code.jquery.com/jquery-latest.js"></script> 	

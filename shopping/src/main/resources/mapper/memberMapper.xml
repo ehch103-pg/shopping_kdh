@@ -10,9 +10,9 @@
 	
 	<insert id="insertMember" parameterType="co.kr.shopping.vo.MemberVO">
 		INSERT INTO member
-		(member_Id, member_Pw, member_Email, member_regDate, member_name, member_gen, member_chDate)
+		(member_id, member_pw, member_email, regDate, member_name, member_gen, role, ch_id)
 		VALUES 
-		(#{mem_id}, #{mem_pw}, #{mem_email},now(), #{mem_name}, #{mem_gen}, now())
+		(#{memId}, #{memPw}, #{memEmail}, now(), #{memName}, #{memGen}, #{role}, #{chId})
 	</insert>
 	
 	

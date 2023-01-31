@@ -1,9 +1,12 @@
 package co.kr.shopping.mapper;
 
-
-import org.springframework.data.repository.CrudRepository;
+import org.apache.ibatis.annotations.Mapper;
 import co.kr.shopping.vo.MemberVO;
 
-public interface MemberMapper extends CrudRepository<MemberVO, Long>  {
-		
+@Mapper
+public interface MemberMapper  {
+
+	MemberVO selectMemberInfo(String userID);
+	
+	void insertMember(MemberVO memberVO);
 }
