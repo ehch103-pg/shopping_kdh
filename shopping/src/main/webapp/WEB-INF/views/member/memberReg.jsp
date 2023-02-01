@@ -34,8 +34,8 @@
 	  	 <option value="F">여성</option>
 	  	</select>
 	  </div>
-	  <input type="submit" id="regBtn">
-	  <input type="reset">
+	  <input type="submit" id="regBtn" value="가입">
+	  <input type="reset" value="취소">
 	 </form>
 	</div>
   <script src="http://code.jquery.com/jquery-latest.js"></script> 	

@@ -5,12 +5,12 @@
 	<select id="selectMemberInfo" resultType="co.kr.shopping.vo.MemberVO">
 		SELECT *
 		  FROM member
-		 WHERE member_id = #{ userID }
+		 WHERE mem_id = #{ userID }
 	</select>
 	
 	<insert id="insertMember" parameterType="co.kr.shopping.vo.MemberVO">
 		INSERT INTO member
-		(member_id, member_pw, member_email, regDate, member_name, member_gen, role, ch_id)
+		(mem_id, mem_pw, mem_email, reg_Date, mem_name, mem_gen, role, ch_id)
 		VALUES 
 		(#{memId}, #{memPw}, #{memEmail}, now(), #{memName}, #{memGen}, #{role}, #{chId})
 	</insert>

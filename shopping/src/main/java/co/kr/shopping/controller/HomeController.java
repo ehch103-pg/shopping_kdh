@@ -1,5 +1,6 @@
 package co.kr.shopping.controller;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HomeController {
 	
 	@GetMapping("/")
-	public String main() {
+	public String main(Model model, Principal principal) {
+		String id = principal.getName();
+		model.addAttribute("id", id);
+		
 		return "index";
 	}
 	
@@ -23,10 +27,6 @@ public class HomeController {
 		return "login";
 	}
 	
-	@PostMapping("/loginProc")
-	public String loginProc() {
-		return null;
-	}
 	
 	@GetMapping("/member/memberReg")
 	public String register() {

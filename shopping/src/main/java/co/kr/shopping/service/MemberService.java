@@ -28,12 +28,18 @@ public class MemberService implements UserDetailsService{
 		memberVO.setRole("USER");
 		memberMapper.insertMember(memberVO);
 	}
+	
+	public MemberVO selectMember(String id) {
+		MemberVO member = memberMapper.selectMemberInfo(id);
+		return member;
+	}
 
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
 		MemberVO memberVO = memberMapper.selectMemberInfo(username);
+		System.err.println(memberVO);
 		if(memberVO==null){
             throw new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다.");
         }

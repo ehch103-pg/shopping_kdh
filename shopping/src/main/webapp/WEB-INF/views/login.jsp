@@ -25,7 +25,6 @@
 	  </div>
 	</div>
 	<button type="submit">로그인</button>
-	<button type="button" onclick="location.href='member/memberReg'">회원가입</button>
    </form>
 </body>
 </html>
