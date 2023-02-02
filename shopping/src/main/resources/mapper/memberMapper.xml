@@ -15,5 +15,15 @@
 		(#{memId}, #{memPw}, #{memEmail}, now(), #{memName}, #{memGen}, #{role}, #{chId})
 	</insert>
 	
-	
+	<update id="updateMember" parameterType="co.kr.shopping.vo.MemberVO">
+		UPDATE member
+		   SET   mem_id = #{memId}
+		       , mem_pw = #{memPw}
+		       , mem_email = #{memEmail}
+		       , ch_date = now()
+		       , mem_name = #{memName}
+		       , mem_gen = #{memGen}
+		       , ch_id = #{chId}
+		 WHERE mem_id = #{memId}
+	</update>
 </mapper>

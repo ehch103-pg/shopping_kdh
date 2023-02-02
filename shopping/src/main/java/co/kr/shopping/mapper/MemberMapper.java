@@ -10,5 +10,7 @@ public interface MemberMapper  {
 
 	MemberVO selectMemberInfo(@Param("userID") String userID);
 	
+	void updateMember(MemberVO memberVO);
+	
 	void insertMember(MemberVO memberVO);
 }

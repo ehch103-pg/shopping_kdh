@@ -20,13 +20,17 @@ public class MemberService implements UserDetailsService{
 	
 	
 	@Transactional
-	public void JoinMember(MemberVO memberVO) {
+	public void JoinorModifyByMember(MemberVO memberVO, int code) {
 		
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		memberVO.setMemPw(passwordEncoder.encode(memberVO.getMemPw()));
 		memberVO.setChId(memberVO.getMemId());
-		memberVO.setRole("USER");
-		memberMapper.insertMember(memberVO);
+		if(code == 1) {
+		    memberVO.setRole("USER");
+		    memberMapper.insertMember(memberVO);
+		}else if(code == 2) {
+			memberMapper.updateMember(memberVO);
+		}
 	}
 	
 	public MemberVO selectMember(String id) {

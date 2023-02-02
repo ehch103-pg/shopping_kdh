@@ -11,7 +11,7 @@
 <body>
 	<h1> 회원수정 </h1>
 	<div class="member-div">
-	 <form name="memFrm" id="memFrm">
+	 <form name="memFrm" id="memFrm" action="/memberModProc" method="post">
 	  <div class="member-div-element">
 		<label>아이디: </label>
 		<input type="text" id="mem_id" name="mem_id" value="${ mem_id }" readonly> 
@@ -35,37 +35,10 @@
 	  	 <option value="F" <c:if test="${ mem_gen eq 'F' }"> selected </c:if>> 여성 </option>
 	  	</select>
 	  </div>
-	  <input type="button" id="modBtn" value="수정">
+	  <input type="submit" id="modBtn" value="수정">
 	  <input type="reset" value="취소">
 	 </form>
 	</div>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
-  <script type="text/javascript">
-  	
-   $("#modBtn").on("click", function(){
-	   let id= $("#mem_id").val();
-	   let pw = $("#mem_pw").val();
-	   let email = $("#mem_email").val();
-	   let name = $("#mem_name").val();
-	   let gen = $("#mem_gen option:selected").val();
-	  	
-	   let data = { 'id': id, 'pw' : pw,  'email' : email, 'name' : name, 'gen' : gen }
-	  	
-	   console.log(data); 
-	   $.ajax({
-		    type : 'post'
-		  , url  : '/memberModProc'  
-		  , data : JSON.stringify(data)
-		  , cache : false
-		  , success : function(){
-			  console.log('success');
-		  }
-	   	  , error : function(){
-	   		  console.log(xhr);
-	   	  }
-	   });
-	   
-   });
-  </script> 
 </body>
 </html>

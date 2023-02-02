@@ -12,15 +12,15 @@ import co.kr.shopping.vo.ReviewVO;
 @Mapper
 public interface ReviewMapper {
 	
-	public List<ReviewVO> selectReviewList(@Param("keyword") Map<String, Object> keyword, @Param("paging") PaginationVO page);
+	public List<Map<String, Object>> selectReviewList(@Param("keyword") String keyword, @Param("paging") PaginationVO paging);
 	
 	public ReviewVO selectReviewDetail(@Param("param") Map<String, Object> param);
 	
-	public int insertReview(@Param("param") Map<String, Object> param);
+	public int insertReview(ReviewVO review);
 	
-	public int updateReview(@Param("param") Map<String, Object> param);
+	public int updateReview(ReviewVO review);
 	
-	public int delete(@Param("param") Map<String, Object> param); 
+	public int delete(ReviewVO review); 
 	
-	public int totalReviewCount(@Param("keyword") Map<String, Object> keyword);
+	public int totalReviewCount(@Param("keyword") String keyword);
 }
