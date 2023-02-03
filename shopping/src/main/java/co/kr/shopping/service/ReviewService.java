@@ -20,8 +20,12 @@ public class ReviewService {
 		return reviewMapper.totalReviewCount(keyword);
 	}
 	
-	public List<Map<String, Object>> selectReviewList(String keyword, PaginationVO paging){
+	public List<ReviewVO> selectReviewList(String keyword, PaginationVO paging){
 		return reviewMapper.selectReviewList(keyword, paging);
+	}
+	
+	public Map<String, Object> selectReviewDetail(Map<String, Object> param){
+		return reviewMapper.selectReviewDetail(param);
 	}
 	
 	public int saveReview(ReviewVO review) {

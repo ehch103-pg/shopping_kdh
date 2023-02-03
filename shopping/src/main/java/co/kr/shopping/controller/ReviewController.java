@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import co.kr.shopping.service.ReviewService;
 import co.kr.shopping.vo.PaginationVO;
+import co.kr.shopping.vo.ReviewVO;
 
 @Controller
 @RequestMapping("/review")
@@ -23,14 +24,22 @@ public class ReviewController {
 	@GetMapping("/reviewList")
 	public String reviewList(Model model, @RequestParam Map<String, Object> param) {
 		PaginationVO paging = new PaginationVO();
+		int page = Integer.parseInt((String)param.getOrDefault("page", ""));
 		String keyword = (String)param.getOrDefault("keyword", "");
 		paging.setTotalRecordCount(reviewService.selectReviewCount(keyword));
-		List<Map<String, Object>> reviewList = new ArrayList<>();
+		List<ReviewVO> reviewList = new ArrayList<>();
 		reviewList = reviewService.selectReviewList(keyword, paging);
 		
 		model.addAttribute("reviewList", reviewList);
 		model.addAttribute("paging", paging);
 		
-		return "reviewList";
+		
+		return "review/reviewList";
+	}
+	
+	@GetMapping("/reviewDetail")
+	public String reviewDetail(Model model) {
+		
+		return "review/reviewDetail";
 	}
 }

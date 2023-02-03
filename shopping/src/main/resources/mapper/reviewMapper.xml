@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">  
+
+<mapper namespace="co.kr.shopping.mapper.ReviewMapper">
+  <select id="selectReviewList" resultType="co.kr.shopping.vo.ReviewVO">
+  	 SELECT   ROWNUM AS RN
+  	        , A.review_no
+  	        , A.review_title
+  	        , A.review_writer
+  	        , A.review_write_date
+  	        , A.review_product_Id
+  	 FROM(	
+  			SELECT review_no, review_title, review_writer, review_write_date, review_product_Id
+ 	  		FROM review
+ 	  	) A
+  	 WHERE A.RN BETWEEN #{ paging.firstPageOnIndex } AND #{ paging.lastPageOnIndex }
+  	<if test="keyword neq null">
+  	 AND review_title like '%' ||  #{keyword} || '%'
+  	</if>
+  </select>
+  
+  <select id="selectReviewDetail" resultType="map">
+  	SELECT   A.review_title
+  		   , A.review_writer
+  		   , A.review_content
+  		   , A.review_lock
+  		   , A.review_write_date
+  		   , A.review_product_Id
+  	  FROM  review  A
+  	      , content B
+  	      , member  C
+  	 WHERE A.review_no = #{ No }
+  	   AND A.review_writer = C.member_id  
+  </select>
+  
+</mapper>

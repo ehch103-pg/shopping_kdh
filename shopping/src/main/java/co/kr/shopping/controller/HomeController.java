@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HomeController {
 	
 	@GetMapping("/")
-	public String main(Model model, Principal principal) {
+	public String main(Model model, Principal principal, HttpServletRequest request) {
 		String id = principal.getName();
+		String uri = request.getRequestURI();
 		model.addAttribute("id", id);
 		
 		return "index";

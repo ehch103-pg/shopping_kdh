@@ -6,10 +6,12 @@ import lombok.Data;
 public class ReviewVO {
 	private int reviewNo;
 	private String reviewTitle;
+	private String reviewWriter;
 	private String reviewContents;
 	private String reviewLock;
-	private String reviewDate;
-	private String DelTime;
-	private String DelYn;
+	private String reviewWriteDate;
+	private String reviewChDate;
+	private String reviewProductId;
+	private String delYn;
 	
 }
