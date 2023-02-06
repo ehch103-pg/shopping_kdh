@@ -1,15 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>로그인</title>
-</head>
-<body>
+<%@ include file="include/header.jsp" %>
+
+  <div>
    <form name="loginFrm" action="/loginProc" method="post">
-	<div>
-	  <div>
+	<div class="form-group">
+	  <div class="col-xs-15">
 		<label class="class-label-wrapper">아이디: </label>
 	  </div>
 	  <div>
@@ -26,5 +22,6 @@
 	</div>
 	<button type="submit">로그인</button>
    </form>
+   </div>
 </body>
 </html>

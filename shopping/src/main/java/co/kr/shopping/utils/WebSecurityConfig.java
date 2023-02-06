@@ -72,15 +72,8 @@ public class WebSecurityConfig {
 	}
 	
 	@Bean
-	@Order(0)
-	public SecurityFilterChain resources(HttpSecurity http) throws Exception {
-		return http.requestMatchers(matchers -> matchers
-				.antMatchers("/resources/**"))
-				.authorizeHttpRequests(authorize -> authorize
-				.anyRequest().permitAll())
-				.requestCache(RequestCacheConfigurer::disable)
-			    .securityContext(AbstractHttpConfigurer::disable)
-			    .sessionManagement(AbstractHttpConfigurer::disable)
-				.build();
+	public WebSecurityCustomizer webSecurityCustomizer() {
+		return (web) -> web.ignoring().mvcMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
 	}
+	
 }

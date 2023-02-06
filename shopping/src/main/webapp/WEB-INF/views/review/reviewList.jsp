@@ -3,24 +3,22 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="../include/header.jsp" %>
  <div class="container">
-  <table>
+  <table class="table">
    <thead>
      <tr>
-     	<th>순번</th>
-     	<th>제목</th>
-     	<th>작성자</th>
-     	<th>작성일</th> 
+     	<th scope="col">순번</th>
+     	<th scope="col">제목</th>
+     	<th scope="col">작성자</th>
+     	<th scope="col">작성일</th> 
      </tr>
 	</thead>
    <tbody>
-    <c:forEach var="review" items="${ reviewList }">
    	 <tr>
-   	  <td> ${ review.reviewNo } </td>
-   	  <td> ${ review.reviewTitle } </td>
-   	  <td> ${ review.reviewDate } </td>
-   	  <td> ${ review.review_write_date } </td>
-   	 </tr>
-   	</c:forEach> 
+   	  <td> 1 </td>
+   	  <td> ㅋㅋㅋ </td>
+   	  <td> test </td>
+   	  <td> 2023-02-06 </td>
+   	 </tr> 
    </tbody>
   </table>
   <div id="pagination-field" class="text-center">
@@ -35,8 +33,8 @@
      </li>
      <c:forEach var="page" varStatus="i" begin="${ paging.firstPageOnIndex }" end="${ paging.lastPageOnIndex }">
 	     <li class="page-item">
-	       <a class="page-link" href="#" onclick="onLoadList(${ i })">
-	         {i.count}  
+	       <a class="page-link" href="#" onclick="onLoadList(${ i.count })">
+	         1 
 	       </a>
 	     </li>
 	 </c:forEach>
@@ -52,18 +50,26 @@
   </div>	
  </div>
  <script>
+ 	$(document).ready(function(){
+ 		onLoadList(1);
+ 	});
+ 
  	function onLoadList(page){
  	  if(page == '' || page == null){
  		  page = 1;
  	  }
- 		let form = createElement('form');
- 		let input = createElemnet('input');
- 		input.setAttribute('name', 'page');
- 		input.setAttribute('value', page);
- 		input.setAttribute('type', 'hidden');
- 		
- 		form.append(input);
- 		form.submit();
+ 	  var data = {'page': page}
+ 	  $.ajax({
+ 		    type : 'get'
+ 		  , data : data
+ 	 	  , url  : '/review/reviewList'
+ 	 	  , success : function(){
+ 	 		  alert('성공');
+ 	 	  }
+ 	 	  , error : function(xhr){
+ 	 		  console.log(xhr);
+ 	 	  }
+ 	  });
  	}
  	
  </script>

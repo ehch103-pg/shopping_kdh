@@ -3,19 +3,16 @@
 
 <mapper namespace="co.kr.shopping.mapper.ReviewMapper">
   <select id="selectReviewList" resultType="co.kr.shopping.vo.ReviewVO">
-  	 SELECT   ROWNUM AS RN
-  	        , A.review_no
-  	        , A.review_title
-  	        , A.review_writer
-  	        , A.review_write_date
-  	        , A.review_product_Id
-  	 FROM(	
-  			SELECT review_no, review_title, review_writer, review_write_date, review_product_Id
- 	  		FROM review
- 	  	) A
-  	 WHERE A.RN BETWEEN #{ paging.firstPageOnIndex } AND #{ paging.lastPageOnIndex }
-  	<if test="keyword neq null">
-  	 AND review_title like '%' ||  #{keyword} || '%'
+  	 SELECT   review_no
+  	        , review_title
+  	        , review_writer
+  	        , review_write_date
+  	        , review_product_Id
+  	 FROM   review
+  	 ORDER BY review_no
+  	 LIMIT #{paging.lastPageOnIndex} OFFSET #{paging.firstPageOnIndex} 
+  	<if test="keyword != null">
+  	 AND review_title like CONCAT('%', #{keyword},'%')
   	</if>
   </select>
   
@@ -31,6 +28,14 @@
   	      , member  C
   	 WHERE A.review_no = #{ No }
   	   AND A.review_writer = C.member_id  
+  </select>
+  
+  <select id="totalReviewCount" resultType="integer">
+  	SELECT COUNT(1)
+  	  FROM review
+  	<if test="keyword != null">
+  	 WHERE  review_title like CONCAT('%', #{keyword},'%')
+  	</if>
   </select>
   
 </mapper>

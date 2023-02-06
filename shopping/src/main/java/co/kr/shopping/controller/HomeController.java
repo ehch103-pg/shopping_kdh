@@ -18,10 +18,12 @@ public class HomeController {
 	
 	@GetMapping("/")
 	public String main(Model model, Principal principal, HttpServletRequest request) {
-		String id = principal.getName();
+		String id = "";
+		if(principal != null) {
+			id = principal.getName();
+			model.addAttribute("id", id);
+		}
 		String uri = request.getRequestURI();
-		model.addAttribute("id", id);
-		
 		return "index";
 	}
 	

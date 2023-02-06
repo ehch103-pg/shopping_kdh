@@ -7,12 +7,15 @@
 
 <label>홈</label>
 	<div>
+	  <sec:authorize access="isAnonymous()">
 		<button onclick="location.href='/login'">로그인</button>
+		<button onclick="location.href='/member/memberReg'">회원 가입</button>
+	  </sec:authorize>
+	  <sec:authorize access="isAuthenticated()">
 		<button onclick="location.href='/logout'">로그아웃</button>
-	</div>
-	<div>
-	  	<button onclick="location.href='/member/memberReg'">회원 가입</button>
-	  	<button onclick="location.href='/member/memberMod?id=${ id }'">회원 정보 수정</button>
+		<button onclick="location.href='/member/memberMod?id=${ id }'">회원 정보 수정</button>
+		<button onclick="location.href='review/reviewList'">리뷰 목록</button>
+	  </sec:authorize>
 	</div>
 </body>
 </html>
