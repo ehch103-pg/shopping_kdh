@@ -16,12 +16,12 @@ public class ReviewService {
 	@Autowired
 	ReviewMapper reviewMapper;
 	
-	public int selectReviewCount(String keyword) {
-		return reviewMapper.totalReviewCount(keyword);
+	public int selectReviewCount(String keyword, String option) {
+		return reviewMapper.totalReviewCount(keyword, option);
 	}
 	
-	public List<ReviewVO> selectReviewList(String keyword, PaginationVO paging){
-		return reviewMapper.selectReviewList(keyword, paging);
+	public List<ReviewVO> selectReviewList(String keyword, String option, PaginationVO paging){
+		return reviewMapper.selectReviewList(keyword, option,paging);
 	}
 	
 	public Map<String, Object> selectReviewDetail(Map<String, Object> param){

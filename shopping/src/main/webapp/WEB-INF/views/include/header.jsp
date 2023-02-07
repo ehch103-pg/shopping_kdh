@@ -10,6 +10,7 @@
 <meta charset="UTF-8">
 <title>Shopping Mall</title>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/custom.css">
 </head>
 <body>
  	<script src="http://code.jquery.com/jquery-latest.js"></script>

@@ -9,11 +9,28 @@
   	        , review_write_date
   	        , review_product_Id
   	 FROM   review
+  	 <if test="option != null or option != ''">
+  	  <if test="option eq 'All'">
+  	  WHERE 
+  	      review_title LIKE CONCAT('%', #{keyword},'%')
+  	      OR review_writer LIKE CONCAT('%', #{keyword},'%')
+  	      OR review_write_date LIKE ('%', #{keyword},'%')
+  	  </if>
+  	  <if test="option eq 'title'">
+  	  WHERE
+  	  	review_title LIKE CONCAT('%', #{keyword},'%')
+  	  </if>
+  	  <if test="option eq 'writer'">
+  	  WHERE
+  	  	review_writer LIKE CONCAT('%', #{keyword},'%')
+  	  </if>
+  	  <if test="option eq 'regDate'">
+  	  WHERE
+  	  	review_write_date LIKE ('%', #{keyword},'%')
+  	  </if>
+  	 </if>
   	 ORDER BY review_no
-  	 LIMIT #{paging.lastPageOnIndex} OFFSET #{paging.firstPageOnIndex} 
-  	<if test="keyword != null">
-  	 AND review_title like CONCAT('%', #{keyword},'%')
-  	</if>
+  	 LIMIT #{paging.firstRecordOnPage}, #{paging.recordCountPerPage}
   </select>
   
   <select id="selectReviewDetail" resultType="map">
@@ -33,9 +50,26 @@
   <select id="totalReviewCount" resultType="integer">
   	SELECT COUNT(1)
   	  FROM review
-  	<if test="keyword != null">
-  	 WHERE  review_title like CONCAT('%', #{keyword},'%')
-  	</if>
+  	<if test="option != null or option != ''">
+  	  <if test="option eq 'All'">
+  	  WHERE 
+  	      review_title LIKE CONCAT('%', #{keyword},'%')
+  	      OR review_writer LIKE CONCAT('%', #{keyword},'%')
+  	      OR review_write_date LIKE ('%', #{keyword},'%')
+  	  </if>
+  	  <if test="option eq 'title'">
+  	  WHERE
+  	  	review_title LIKE CONCAT('%', #{keyword},'%')
+  	  </if>
+  	  <if test="option eq 'writer'">
+  	  WHERE
+  	  	review_writer LIKE CONCAT('%', #{keyword},'%')
+  	  </if>
+  	  <if test="option eq 'regDate'">
+  	  WHERE
+  	  	review_write_date LIKE ('%', #{keyword},'%')
+  	  </if>
+  	 </if>
   </select>
   
 </mapper>

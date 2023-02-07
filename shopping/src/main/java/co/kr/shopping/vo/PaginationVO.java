@@ -29,7 +29,7 @@ public class PaginationVO {
 		this.pageSize = pageSize;
 	}
 	public int getTotalPageCount() {
-		totalPageCount = ((getTotalRecordCount() - 1) / getRecordCountPerPage() + 1);
+		totalPageCount = ((totalRecordCount-1)/recordCountPerPage) + 1;
 		return totalPageCount;
 	}
 	public void setTotalPageCount(int totalPageCount) {

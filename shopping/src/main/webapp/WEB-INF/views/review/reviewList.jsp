@@ -13,14 +13,45 @@
      </tr>
 	</thead>
    <tbody>
+   <c:choose>
+    <c:when test="${ size > 0}">
+	 <c:forEach var="review" items="${ reviewList }">
+	  <tr>
+	   <td> ${ review.reviewNo } </td>
+	   <td><a href="/review/reviewDetail?id=${ review.reviewNo }"> ${ review.reviewTitle } </a></td>
+	   <td> ${ review.reviewWriter }</td>
+	   <td> ${ review.reviewWriteDate }</td>
+	  </tr> 
+	 </c:forEach>
+   	</c:when>
+   	<c:otherwise>
    	 <tr>
-   	  <td> 1 </td>
-   	  <td> ㅋㅋㅋ </td>
-   	  <td> test </td>
-   	  <td> 2023-02-06 </td>
-   	 </tr> 
+      <td>게시물이 존재하지 않습니다.</td>
+     </tr>
+   	</c:otherwise>
+   </c:choose>
    </tbody>
   </table>
+  <div class="search_wrap">
+   <div class="search_area">
+    <div class="row">
+  	 <div class="col-md-8">
+  	  <select id="searchType">
+  	  	<option value="All" <c:if test="${ option eq 'All' }"> selected </c:if> >전체</option>
+  	  	<option value="title" <c:if test="${ option eq 'title' }"> selected </c:if>>제목</option>
+  	  	<option value="writer" <c:if test="${ option eq 'writer' }"> selected </c:if>>작성자</option>
+  	  	<option value="regDate" <c:if test="${ option eq 'regDate' }"> selected </c:if>>작성일</option> 
+  	  </select>
+  	  <input type="text" id="keyword" name="keyword" value="${ keyword }"> 
+  	  <input type="button" id="search" class="btn float-left" value="검색">
+  	  <form id="searchForm" name="searchForm" method="get">
+  	  	
+  	  </form>
+  	 </div>
+   	 <div class="col-md-4"><input type="button" id="review_write" class="btn float-right" value="리뷰 글 쓰기"></div>
+    </div>
+   </div>
+  </div>
   <div id="pagination-field" class="text-center">
    <nav>
     <ul class="pagination">
@@ -34,10 +65,10 @@
      <c:forEach var="page" varStatus="i" begin="${ paging.firstPageOnIndex }" end="${ paging.lastPageOnIndex }">
 	     <li class="page-item">
 	       <a class="page-link" href="#" onclick="onLoadList(${ i.count })">
-	         1 
+	         ${ i.count } 
 	       </a>
 	     </li>
-	 </c:forEach>
+	 </c:forEach> 
 	 <li class="page-item">
 	  <c:if test="${ paging.currentPageNo < paging.lastPageOnIndex }">
         <a class="page-link" href="#" onclick="onLoadList(${ paging.currentPageNo + 1 })" aria-label="다음">
@@ -50,27 +81,35 @@
   </div>	
  </div>
  <script>
- 	$(document).ready(function(){
- 		onLoadList(1);
- 	});
- 
  	function onLoadList(page){
- 	  if(page == '' || page == null){
- 		  page = 1;
- 	  }
- 	  var data = {'page': page}
- 	  $.ajax({
- 		    type : 'get'
- 		  , data : data
- 	 	  , url  : '/review/reviewList'
- 	 	  , success : function(){
- 	 		  alert('성공');
- 	 	  }
- 	 	  , error : function(xhr){
- 	 		  console.log(xhr);
- 	 	  }
- 	  });
+ 		let keyword = document.getElementById('keyword');
+ 		let searchType = $("#searchType option:selected").val();
+ 		
+ 		let form = $()
  	}
+ 	
+ 	$("#review_write").on("click", function(){
+ 		location.href='/review/reviewWrite';
+ 	});
+ 	
+ 	$("#search").on("click", function(){
+ 		let keywordVal = document.getElementById('keyword').value;
+ 		let searchVal = $("#searchType option:selected").val();
+ 		var searchType = document.createElement('input');
+ 		searchType.setAttribute('type', 'hidden');
+ 		searchType.setAttribute('value', searchVal);
+ 		searchType.setAttribute('name', 'option');
+ 		
+ 		var keyword = document.createElement('input');
+ 		keyword.setAttribute('type', 'hidden');
+ 		keyword.setAttribute('value', keywordVal);
+ 		keyword.setAttribute('name', 'searchWord');
+ 		
+ 		let searchForm = document.getElementById('searchForm');
+ 		searchForm.append(keyword);
+ 		searchForm.append(searchType);
+ 		searchForm.submit();
+ 	});
  	
  </script>
 </body>
