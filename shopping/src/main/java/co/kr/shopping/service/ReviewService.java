@@ -24,11 +24,15 @@ public class ReviewService {
 		return reviewMapper.selectReviewList(keyword, option,paging);
 	}
 	
-	public Map<String, Object> selectReviewDetail(Map<String, Object> param){
-		return reviewMapper.selectReviewDetail(param);
+	public Map<String, Object> selectReviewDetail(String reviewNo){
+		return reviewMapper.selectReviewDetail(reviewNo);
 	}
 	
 	public int saveReview(ReviewVO review) {
 		return reviewMapper.insertReview(review);
+	}
+	
+	public void mergeView(String reviewNo) {
+		reviewMapper.mergeView(reviewNo);
 	}
 }

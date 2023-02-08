@@ -19,15 +19,13 @@ import co.kr.shopping.vo.MemberVO;
 
 @Controller
 @RequestMapping("/member")
-public class memberController {
+public class MemberController {
 	
 	@Autowired
 	MemberService memberService;
 	
-	@PostMapping("/memberRegProc")
+	@PostMapping("/memberReg")
 	public String saveMember(@RequestParam Map<String, Object> param) {
-		String msg = "";
-		System.err.println(param);
 		String id = (String)param.get("mem_id");
 	
 		MemberVO member = new MemberVO();
@@ -38,14 +36,13 @@ public class memberController {
 		member.setMemGen((String)param.get("mem_gen"));
 		memberService.JoinorModifyByMember(member, 1);
 			
-		return "redirect:/login";
+		return null;
 		
 	}
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/memberMod")
 	public String modify(Model model, @RequestParam Map<String, Object> param) {
 		String Id = (String)param.getOrDefault("id", "");
-		System.err.println(Id);
 		MemberVO memberVO = memberService.selectMember(Id);
 		
 		
@@ -66,7 +63,6 @@ public class memberController {
 		memberVO.setMemEmail((String)param.getOrDefault("mem_email", ""));
 		memberVO.setMemName((String)param.getOrDefault("mem_name", ""));
 		memberVO.setMemGen((String)param.getOrDefault("mem_gen", ""));
-		System.out.println(memberVO);
 		memberService.JoinorModifyByMember(memberVO, 2);
 		
 		return "login";

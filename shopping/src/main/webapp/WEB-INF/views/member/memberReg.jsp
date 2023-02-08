@@ -2,16 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+<%@ include file="../include/header.jsp" %>
 	<h1> 회원가입 </h1>
 	<div class="member-div">
-	 <form name="memFrm" id="memFrm" action="/memberRegProc" method="post">
+	 <form name="memFrm" id="memFrm">
 	  <div class="member-div-element">
 		<label>아이디: </label>
 		<input type="text" id="mem_id" name="mem_id"> 
@@ -35,9 +29,28 @@
 	  	 <option value="F">여성</option>
 	  	</select>
 	  </div>
-	  <input type="submit" id="regBtn" value="가입">
+	  <input type="button" id="regBtn" value="가입">
 	  <input type="reset" value="취소">
 	 </form>
 	</div>
+	
+	<script>
+		$("#regBtn").on("click", function() {
+			let form = $("#memFrm").serialize();
+			let url = '/member/memberReg'
+			$.ajax({
+				 type : 'post'
+			   , url  : url	 
+			   , data : form
+			   , cache : false
+			   , success : function(){
+				   alert('회원가입을 성공하였습니다. 축하드립니다!');
+				   location.href='/login';
+			   }, error : function(xhr){
+				   console.log(xhr);
+			   }
+			})
+		})
+	</script>
 </body>
 </html>

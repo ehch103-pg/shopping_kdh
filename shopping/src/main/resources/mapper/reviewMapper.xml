@@ -38,13 +38,15 @@
   		   , A.review_writer
   		   , A.review_content
   		   , A.review_lock
-  		   , A.review_write_date
+  		   , DATE_FORMAT(A.review_write_date, "%Y-%m-%d %H:%i:%s") AS regDate
   		   , A.review_product_Id
+  		   , B.like_count
+  		   , B.view_count
   	  FROM  review  A
   	      , content B
   	      , member  C
-  	 WHERE A.review_no = #{ No }
-  	   AND A.review_writer = C.member_id  
+  	 WHERE A.review_no = #{ reviewNo }
+  	   AND A.review_writer = C.mem_id  
   </select>
   
   <select id="totalReviewCount" resultType="integer">
@@ -71,5 +73,10 @@
   	  </if>
   	 </if>
   </select>
+  
+  <update id="mergeView" parameterType="string">
+  	INSERT INTO content( view_count ) 
+  	VALUES ()
+  </update>
   
 </mapper>

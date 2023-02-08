@@ -8,6 +8,13 @@
 	font-weight: bold;
 }
 
-#button-area{
+.button-area{
 	text-align: center;
 }
+
+.thead {
+	background-color: yellow;
+	text-align: center;
+}
+
+
