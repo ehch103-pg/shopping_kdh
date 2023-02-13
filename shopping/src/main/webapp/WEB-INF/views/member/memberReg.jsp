@@ -43,9 +43,14 @@
 			   , url  : url	 
 			   , data : form
 			   , cache : false
-			   , success : function(){
-				   alert('회원가입을 성공하였습니다. 축하드립니다!');
-				   location.href='/login';
+			   , success : function(data){
+				   if(data.result == 'S'){
+				       alert('회원가입을 성공하였습니다. 축하드립니다!');
+				   	   location.href='/login';
+				   }else {
+					   alert('기존에 등록된 회원입니다.');
+					   location.reload();
+				   }
 			   }, error : function(xhr){
 				   console.log(xhr);
 			   }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="co.kr.shopping.mapper.ReviewMapper">
   <select id="selectReviewList" resultType="co.kr.shopping.vo.ReviewVO">
@@ -8,13 +8,14 @@
   	        , review_writer
   	        , review_write_date
   	        , review_product_Id
+  	        , view_count
   	 FROM   review
   	 <if test="option != null or option != ''">
   	  <if test="option eq 'All'">
   	  WHERE 
   	      review_title LIKE CONCAT('%', #{keyword},'%')
   	      OR review_writer LIKE CONCAT('%', #{keyword},'%')
-  	      OR review_write_date LIKE ('%', #{keyword},'%')
+  	      OR review_write_date LIKE CONCAT('%', #{keyword},'%')
   	  </if>
   	  <if test="option eq 'title'">
   	  WHERE
@@ -26,7 +27,7 @@
   	  </if>
   	  <if test="option eq 'regDate'">
   	  WHERE
-  	  	review_write_date LIKE ('%', #{keyword},'%')
+  	  	review_write_date LIKE CONCAT('%', #{keyword},'%')
   	  </if>
   	 </if>
   	 ORDER BY review_no
@@ -37,17 +38,48 @@
   	SELECT   A.review_title
   		   , A.review_writer
   		   , A.review_content
-  		   , A.review_lock
+  		   , A.view_count
   		   , DATE_FORMAT(A.review_write_date, "%Y-%m-%d %H:%i:%s") AS regDate
   		   , A.review_product_Id
-  		   , B.like_count
-  		   , B.view_count
+  		   , (SELECT COUNT(like_check) FROM like_content WHERE review_no = #{ reviewNo }) AS like_count
   	  FROM  review  A
-  	      , content B
+  	      , like_content B
   	      , member  C
   	 WHERE A.review_no = #{ reviewNo }
-  	   AND A.review_writer = C.mem_id  
+  	   AND A.review_no = B.review_no
+  	   AND A.review_writer = C.mem_id 
+  	 GROUP BY A.review_no   
   </select>
+  
+  <select id="findlikeEx" resultType="Integer">
+  	SELECT COUNT(1)
+	  FROM like_content
+	 WHERE review_no = #{review_no}
+  	   AND mem_no = #{mem_no}
+  </select>
+  
+  <select id="likeCheck" resultType="Integer">
+  	SELECT like_check
+  	  FROM like_content
+  	 WHERE review_no = #{review_no}
+  	   AND mem_no = #{mem_no}
+  </select>
+  
+   <insert id="insertReviewLike" parameterType="map">
+   	INSERT INTO like_content(like_check, mem_no, review_no)
+   	VALUES(#{like_switch}, #{mem_no}, #{review_no})
+  </insert>
+  
+  <update id="updateReviewLike" parameterType="map">
+  	UPDATE like_content
+  	  SET  like_check = #{like_switch}
+  	 WHERE like_Id = (
+  	 				  SELECT like_Id 
+				  	  FROM like_content
+				  	  WHERE review_no = #{review_no}
+				  	    AND mem_no = #{mem_no}
+				  	  )
+  </update>
   
   <select id="totalReviewCount" resultType="integer">
   	SELECT COUNT(1)
@@ -57,7 +89,7 @@
   	  WHERE 
   	      review_title LIKE CONCAT('%', #{keyword},'%')
   	      OR review_writer LIKE CONCAT('%', #{keyword},'%')
-  	      OR review_write_date LIKE ('%', #{keyword},'%')
+  	      OR review_write_date LIKE CONCAT('%', #{keyword},'%')
   	  </if>
   	  <if test="option eq 'title'">
   	  WHERE
@@ -69,14 +101,10 @@
   	  </if>
   	  <if test="option eq 'regDate'">
   	  WHERE
-  	  	review_write_date LIKE ('%', #{keyword},'%')
+  	  	review_write_date LIKE CONCAT('%', #{keyword},'%')
   	  </if>
   	 </if>
   </select>
   
-  <update id="mergeView" parameterType="string">
-  	INSERT INTO content( view_count ) 
-  	VALUES ()
-  </update>
   
 </mapper>

@@ -10,6 +10,7 @@
      	<th scope="col">제목</th>
      	<th scope="col">작성자</th>
      	<th scope="col">작성일</th> 
+     	<th scope="col">조회수</th>
      </tr>
 	</thead>
    <tbody>
@@ -21,6 +22,7 @@
 	   <td><a href="/review/reviewDetail?id=${ review.reviewNo }"> ${ review.reviewTitle } </a></td>
 	   <td> ${ review.reviewWriter }</td>
 	   <td> ${ review.reviewWriteDate }</td>
+	   <td> ${ review.viewCount }</td>
 	  </tr> 
 	 </c:forEach>
    	</c:when>
@@ -42,10 +44,11 @@
   	  	<option value="writer" <c:if test="${ option eq 'writer' }"> selected </c:if>>작성자</option>
   	  	<option value="regDate" <c:if test="${ option eq 'regDate' }"> selected </c:if>>작성일</option> 
   	  </select>
-  	  <input type="text" id="keyword" name="keyword" value="${ keyword }"> 
-  	  <input type="button" id="search" class="btn float-left" value="검색">
-  	  <form id="searchForm" name="searchForm" method="get">
-  	  	
+  	   
+  	   <input type="text" id="keyword" name="keyword" value="${ keyword }"> 
+  	   <input type="button" id="search" class="btn float-left" value="검색" onclick="searchKeyword();">
+  	   <form id="searchForm" name="searchForm" method="get">
+  	  
   	  </form>
   	 </div>
    	 <div class="col-md-4"><input type="button" id="review_write" class="btn float-right" value="리뷰 글 쓰기"></div>
@@ -81,18 +84,33 @@
   </div>	
  </div>
  <script>
- 	function onLoadList(page){
+ 
+ 	function onLoadList(pageVal){
  		let keyword = document.getElementById('keyword');
  		let searchType = $("#searchType option:selected").val();
+ 		let page = document.createElement('input');
+ 		page.setAttribute('type', 'hidden');
+ 		page.setAttribute('value', pageVal);
+ 		page.setAttribute('name', 'page');
  		
- 		let form = $()
+ 		let form = $("#searchForm");
+ 		form.append(keyword);
+ 		form.append(searchType);
+ 		form.append(page);
+ 		form.submit();
  	}
  	
  	$("#review_write").on("click", function(){
  		location.href='/review/reviewWrite';
  	});
  	
- 	$("#search").on("click", function(){
+ 	$("#keyword").keydown(function(key){
+ 		if(key.keyCode == 13){
+ 			searchKeyword();
+ 		}
+ 	});
+ 	
+ 	function searchKeyword(){
  		let keywordVal = document.getElementById('keyword').value;
  		let searchVal = $("#searchType option:selected").val();
  		var searchType = document.createElement('input');
@@ -109,7 +127,7 @@
  		searchForm.append(keyword);
  		searchForm.append(searchType);
  		searchForm.submit();
- 	});
+ 	}
  	
  </script>
 </body>

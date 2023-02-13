@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import co.kr.shopping.service.MemberService;
 import co.kr.shopping.service.ReviewService;
 import co.kr.shopping.vo.PaginationVO;
 import co.kr.shopping.vo.ReviewVO;
@@ -29,6 +32,9 @@ public class ReviewController {
 
 	@Autowired
 	ReviewService reviewService;
+	
+	@Autowired
+	MemberService memberService;
 	
 	@GetMapping("/reviewList")
 	public String reviewList(Model model, @RequestParam Map<String, Object> param) {
@@ -88,31 +94,72 @@ public class ReviewController {
 	@PostMapping("/modRev")
 	public Map<String, Object> modifyReview(@RequestBody Map<String, Object> param){
 		Map<String, Object> result = new HashMap<>();
+		
+		ReviewVO reviewVo = new ReviewVO();
+		String title = param.get("title").toString();
+		
+		int check = reviewService.updateReview(reviewVo);
+		
+		if(check > 0) {
+			
+		}
+		
 		return result;
 	}
 	
+	@ResponseBody
+	@PostMapping("/LikeProc")
+	public Map<String, Object> likeCheck(@RequestBody Map<String, Object> param){
+		Map<String, Object> map = new HashMap<>();
+		String reviewno = param.getOrDefault("reviewNo", "").toString();
+		String like_User = param.getOrDefault("like_user", "").toString();
+		
+		int like_User_no = memberService.selectMember(like_User).getMemSeq();
+		
+		map.put("review_no", reviewno);
+		map.put("mem_no", like_User_no);
+		
+		int findLike = reviewService.findLike(map);
+		if(findLike == 1) {
+			int likeCheck = reviewService.likeCheck(map);
+			if(likeCheck == 1) {
+				map.put("like_switch", "0");
+			}else {
+				map.put("like_switch", "1");
+			}
+			reviewService.updateLike(map);
+		}else {
+			map.put("like_switch", "1");
+			reviewService.insertLike(map);
+		}
+		map.put("result", "S");
+		return map;
+	}
+	
 	@GetMapping("/reviewDetail")
-	public String reviewDetail(Model model, @RequestParam(required = false) Map<String, Object> param, Principal principal) throws ParseException {
+	public String reviewDetail(Model model, @RequestParam(required = false) Map<String, Object> param, Principal principal, HttpServletRequest request) 
+			throws ParseException {
 		
 		String reviewNo = param.getOrDefault("id", "").toString();
 		Map<String, Object> reviewVo = reviewService.selectReviewDetail(reviewNo);
 		String writer = reviewVo.getOrDefault("review_writer", "").toString();
-		int user_check;
-		if(principal.getName().equals(writer)) {
-			user_check = 1;
-		}else {
-			user_check = 0;
-		}
-
+		String content_user = principal.getName();
+		int viewCount = Integer.parseInt(reviewVo.getOrDefault("view_count", "").toString());
+		int likeCount = Integer.parseInt(reviewVo.getOrDefault("like_count", "").toString());
+//		int likeCheck = reviewService.likeCheck(map);
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		String regDate = reviewVo.getOrDefault("regDate", "").toString();
 		Date parseDate = sdf.parse(regDate);
+				
+//		System.err.println("like:"+ likeCheck);
 		
-		reviewService.mergeView(reviewNo);
-		
-		model.addAttribute("check", user_check);
+		model.addAttribute("like_count", likeCount);
+		model.addAttribute("view_Count", viewCount);
+		model.addAttribute("reviewNo", reviewNo);
+		model.addAttribute("check", content_user);
 		model.addAttribute("title", reviewVo.getOrDefault("review_title", "").toString());
-		model.addAttribute("writer", reviewVo.getOrDefault("review_writer", "").toString());
+		model.addAttribute("writer", writer);
 		model.addAttribute("regDate", parseDate);
 		
 		return "review/reviewDetail";

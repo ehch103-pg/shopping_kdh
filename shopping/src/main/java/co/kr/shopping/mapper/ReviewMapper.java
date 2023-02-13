@@ -16,13 +16,23 @@ public interface ReviewMapper {
 	
 	Map<String, Object> selectReviewDetail(@Param("reviewNo") String reviewNo);
 	
-	void mergeView(@Param("reviewNo") String reviewNo);
-	
 	int insertReview(ReviewVO review);
 	
 	int updateReview(ReviewVO review);
+
+	boolean selectCheck(String reviewNo);
 	
 	int delete(ReviewVO review); 
 	
 	int totalReviewCount(@Param("keyword") String keyword, @Param("option") String option);
+
+	void updateReviewLike(Map<String, Object> param);
+
+	void insertReviewLike(Map<String, Object> param);
+	
+	int likeCheck(Map<String, Object> map);
+
+	int selectViewCount(@Param("reviewNo") String reviewNo);
+
+	int findlikeEx(Map<String, Object> map);
 }

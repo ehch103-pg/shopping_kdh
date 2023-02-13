@@ -12,6 +12,7 @@ public class ReviewVO {
 	private String reviewWriteDate;
 	private String reviewChDate;
 	private String reviewProductId;
+	private int viewCount;
 	private String delYn;
 	
 }

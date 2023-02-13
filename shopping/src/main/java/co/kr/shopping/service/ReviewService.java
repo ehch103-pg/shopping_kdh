@@ -24,6 +24,10 @@ public class ReviewService {
 		return reviewMapper.selectReviewList(keyword, option,paging);
 	}
 	
+	public boolean selectCheck(String reviewNo) {
+		return reviewMapper.selectCheck(reviewNo);
+	}
+	
 	public Map<String, Object> selectReviewDetail(String reviewNo){
 		return reviewMapper.selectReviewDetail(reviewNo);
 	}
@@ -31,8 +35,38 @@ public class ReviewService {
 	public int saveReview(ReviewVO review) {
 		return reviewMapper.insertReview(review);
 	}
-	
-	public void mergeView(String reviewNo) {
-		reviewMapper.mergeView(reviewNo);
+
+	public void updateLike(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		System.err.println(param);
+		reviewMapper.updateReviewLike(param);
 	}
+
+	public int likeCheck(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return reviewMapper.likeCheck(map);
+	}
+
+	public int updateReview(ReviewVO reviewVo) {
+		// TODO Auto-generated method stub
+		return reviewMapper.updateReview(reviewVo);
+	}
+
+	public int selectViewCount(String reviewNo) {
+		// TODO Auto-generated method stub
+		return reviewMapper.selectViewCount(reviewNo);
+	}
+
+	public int findLike(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		int result = reviewMapper.findlikeEx(map);
+		
+		return result;
+	}
+
+	public void insertLike(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		reviewMapper.insertReviewLike(map);
+	}
+	
 }

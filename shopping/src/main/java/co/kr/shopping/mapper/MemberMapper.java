@@ -13,4 +13,5 @@ public interface MemberMapper  {
 	void updateMember(MemberVO memberVO);
 	
 	void insertMember(MemberVO memberVO);
+
 }

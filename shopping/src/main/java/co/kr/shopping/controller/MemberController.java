@@ -25,18 +25,23 @@ public class MemberController {
 	MemberService memberService;
 	
 	@PostMapping("/memberReg")
-	public String saveMember(@RequestParam Map<String, Object> param) {
+	public Map<String, Object> saveMember(@RequestParam Map<String, Object> param) {
 		String id = (String)param.get("mem_id");
-	
-		MemberVO member = new MemberVO();
-		member.setMemId(id);
-		member.setMemPw((String)param.get("mem_pw"));
-		member.setMemEmail((String)param.get("mem_email"));
-		member.setMemName((String)param.get("mem_name"));
-		member.setMemGen((String)param.get("mem_gen"));
-		memberService.JoinorModifyByMember(member, 1);
-			
-		return null;
+		Map<String, Object> result = new HashMap<>();
+		
+		if(memberService.selectMember(id) != null) {
+			result.put("result", "F");
+		}else {
+			MemberVO member = new MemberVO();
+			member.setMemId(id);
+			member.setMemPw((String)param.get("mem_pw"));
+			member.setMemEmail((String)param.get("mem_email"));
+			member.setMemName((String)param.get("mem_name"));
+			member.setMemGen((String)param.get("mem_gen"));
+			memberService.JoinorModifyByMember(member, 1);
+			result.put("result", "S");
+		}
+		return result;
 		
 	}
 	@PreAuthorize("isAuthenticated()")
