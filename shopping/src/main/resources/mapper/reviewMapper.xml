@@ -35,20 +35,23 @@
   </select>
   
   <select id="selectReviewDetail" resultType="map">
-  	SELECT   A.review_title
+    SELECT   A.review_title
   		   , A.review_writer
   		   , A.review_content
   		   , A.view_count
   		   , DATE_FORMAT(A.review_write_date, "%Y-%m-%d %H:%i:%s") AS regDate
   		   , A.review_product_Id
-  		   , (SELECT COUNT(like_check) FROM like_content WHERE review_no = #{ reviewNo }) AS like_count
   	  FROM  review  A
-  	      , like_content B
   	      , member  C
   	 WHERE A.review_no = #{ reviewNo }
-  	   AND A.review_no = B.review_no
   	   AND A.review_writer = C.mem_id 
   	 GROUP BY A.review_no   
+  </select>
+  
+  <select id="likeCount" resultType="Integer">
+  	 SELECT NVL(SUM(like_check), 0) AS like_count
+  	   FROM like_content
+ 	  WHERE review_no = #{ reviewNo } 
   </select>
   
   <select id="findlikeEx" resultType="Integer">
@@ -59,7 +62,7 @@
   </select>
   
   <select id="likeCheck" resultType="Integer">
-  	SELECT like_check
+  	SELECT IFNULL(MAX(like_check), 0) AS like_check
   	  FROM like_content
   	 WHERE review_no = #{review_no}
   	   AND mem_no = #{mem_no}
@@ -79,6 +82,12 @@
 				  	  WHERE review_no = #{review_no}
 				  	    AND mem_no = #{mem_no}
 				  	  )
+  </update>
+  
+  <update id="updateViewCount" parameterType="String">
+	UPDATE review
+	   SET view_count = view_count+1
+	 WHERE review_no = #{reviewNo}
   </update>
   
   <select id="totalReviewCount" resultType="integer">

@@ -38,7 +38,8 @@
    </tbody>
   </table>
   <div class="like-container">
-   <label> 좋아요 </label>
+   <label> 좋아요: </label> 
+   <label id="like_count"> ${ like_count } </label>
    <button id="likeBtn">
     <c:choose>
      <c:when test="${ like_check == 0}">
@@ -49,6 +50,7 @@
    	 </c:otherwise>
    	</c:choose>
    </button>
+   <input type="hidden" value="${ like_check } " id="like_check">
   </div>
 </div>
 
@@ -64,6 +66,7 @@
 
 <script>
 	let no = document.getElementById("reviewNo").value;
+	var msg="";
 	$("#go_list").on("click", function(){
 		location.href='/review/reviewList';
 	});
@@ -73,9 +76,24 @@
 	});
 	
 	$("#likeBtn").on("click", function(){
+		var count = $("#like_check").val();
 		let login = $("#loginUser").val();
 		let data = { 'like_user': login, 'reviewNo' : no};
-		let htmlTag;
+		if(count%2 == 0){
+			msg = '좋아요를 하시겠습니까?'
+		}else {
+			msg = '좋아요를 취소하시겠습니까?'
+		}
+		
+		if(confirm(msg)){
+			likeChange(data);
+		}
+	});
+	
+	function likeChange(data){
+		var like_count = 0;
+		var htmlTag = "";
+		var like_check = document.getElementById('like_check');
 		$.ajax({
 			  type : 'post'
 			, url  : '/review/LikeProc' 
@@ -83,16 +101,18 @@
 			, cache : false
 			, contentType: 'application/json'
 			, success : function(data){
+				like_count = data.like_count;
 				if(data.result == 'S'){
 					if(data.like_switch == '0'){
-						alert('좋아요가 취소되었습니다.');
 						htmlTag += '<i class="fa-regular fa-heart"></i>';
-						$("#likeBtn").html(htmlTag);
+						alert('좋아요가 취소되었습니다.');
 					}else {
+						htmlTag += '<i class="fa-solid fa-heart"></i>';
 						alert('좋아요가 반영되었습니다.');
-						htmlTag += ' <i class="fa-solid fa-heart"></i>';
-						$("#likeBtn").html(htmlTag);
 					}
+					like_check.value = like_count;
+					$("#like_count").html(like_count);
+					$("#likeBtn").html(htmlTag);
 				}else {
 					alert('좋아요가 적용되지 않았습니다.')
 				}
@@ -100,9 +120,8 @@
 			, error   : function(xhr){
 				console.log(xhr);
 			}
-			,
 		});
-	});
+	}
 </script>
 
 

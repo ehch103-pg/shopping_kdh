@@ -36,10 +36,9 @@ public class ReviewService {
 		return reviewMapper.insertReview(review);
 	}
 
-	public void updateLike(Map<String, Object> param) {
+	public int updateLike(Map<String, Object> param) {
 		// TODO Auto-generated method stub
-		System.err.println(param);
-		reviewMapper.updateReviewLike(param);
+		return reviewMapper.updateReviewLike(param);
 	}
 
 	public int likeCheck(Map<String, Object> map) {
@@ -52,11 +51,6 @@ public class ReviewService {
 		return reviewMapper.updateReview(reviewVo);
 	}
 
-	public int selectViewCount(String reviewNo) {
-		// TODO Auto-generated method stub
-		return reviewMapper.selectViewCount(reviewNo);
-	}
-
 	public int findLike(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		int result = reviewMapper.findlikeEx(map);
@@ -64,9 +58,18 @@ public class ReviewService {
 		return result;
 	}
 
-	public void insertLike(Map<String, Object> map) {
+	public int insertLike(Map<String, Object> map) {
 		// TODO Auto-generated method stub
-		reviewMapper.insertReviewLike(map);
+		return  reviewMapper.insertReviewLike(map);
+	}
+
+	public void updateViewCount(String reviewNo) {
+		// TODO Auto-generated method stub
+		reviewMapper.updateViewCount(reviewNo);
+	}
+	
+	public int likeCount(String reviewNo) {
+		return reviewMapper.likeCount(reviewNo);
 	}
 	
 }

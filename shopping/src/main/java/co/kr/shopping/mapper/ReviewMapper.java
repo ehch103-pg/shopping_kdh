@@ -26,13 +26,15 @@ public interface ReviewMapper {
 	
 	int totalReviewCount(@Param("keyword") String keyword, @Param("option") String option);
 
-	void updateReviewLike(Map<String, Object> param);
+	int updateReviewLike(Map<String, Object> param);
 
-	void insertReviewLike(Map<String, Object> param);
+	int insertReviewLike(Map<String, Object> param);
 	
 	int likeCheck(Map<String, Object> map);
 
-	int selectViewCount(@Param("reviewNo") String reviewNo);
-
 	int findlikeEx(Map<String, Object> map);
+
+	void updateViewCount(@Param("reviewNo") String reviewNo);
+
+	int likeCount(String reviewNo);
 }

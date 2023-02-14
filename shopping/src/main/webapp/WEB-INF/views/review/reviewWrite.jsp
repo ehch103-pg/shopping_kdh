@@ -44,11 +44,11 @@
    </tr>
    <tr>
     <td><label>리뷰 내용 </label></td>
-    <td><textarea id="review_content" rows="40" cols="120"></textarea></td>
+    <td><textarea id="review_content" rows="40" cols="120">${ review.review_content }</textarea></td>
    </tr>
    <tr>
     <td><label>상품명 </label></td>
-    <td><span id="product_info">감자</span></td>
+    <td><span id="product_info">${ review_product_Id }</span></td>
    </tr>
    </tbody>
   </table>

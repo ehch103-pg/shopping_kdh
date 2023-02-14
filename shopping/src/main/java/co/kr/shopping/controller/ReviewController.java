@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import co.kr.shopping.service.MemberService;
 import co.kr.shopping.service.ReviewService;
+import co.kr.shopping.vo.MemberVO;
 import co.kr.shopping.vo.PaginationVO;
 import co.kr.shopping.vo.ReviewVO;
 
@@ -64,7 +65,13 @@ public class ReviewController {
 	}
 	
 	@GetMapping("/reviewWrite")
-	public String reviewWrite() {
+	public String reviewWrite(@RequestParam(required = false) Map<String, Object> param, Model model) {
+		String reviewNo = param.getOrDefault("id", "").toString();
+		
+		Map<String, Object> reviewVo = reviewService.selectReviewDetail(reviewNo);
+		System.err.println(reviewVo);
+		
+		model.addAttribute("review", reviewVo);
 		return "review/reviewWrite";
 	}
 	
@@ -113,9 +120,9 @@ public class ReviewController {
 		Map<String, Object> map = new HashMap<>();
 		String reviewno = param.getOrDefault("reviewNo", "").toString();
 		String like_User = param.getOrDefault("like_user", "").toString();
-		
+		Map<String, Object> review = reviewService.selectReviewDetail(reviewno);
 		int like_User_no = memberService.selectMember(like_User).getMemSeq();
-		
+		int result = 0;
 		map.put("review_no", reviewno);
 		map.put("mem_no", like_User_no);
 		
@@ -127,12 +134,20 @@ public class ReviewController {
 			}else {
 				map.put("like_switch", "1");
 			}
-			reviewService.updateLike(map);
+			result = reviewService.updateLike(map);
+			
 		}else {
 			map.put("like_switch", "1");
-			reviewService.insertLike(map);
+			result = reviewService.insertLike(map);
 		}
-		map.put("result", "S");
+		int like_count = reviewService.likeCount(reviewno);
+		if(result == 1) {
+			map.put("result", "S");
+		}else {
+			map.put("result", "F");
+		}
+		map.put("like_count", like_count);
+		System.err.println(map);
 		return map;
 	}
 	
@@ -141,19 +156,27 @@ public class ReviewController {
 			throws ParseException {
 		
 		String reviewNo = param.getOrDefault("id", "").toString();
+		reviewService.updateViewCount(reviewNo);
 		Map<String, Object> reviewVo = reviewService.selectReviewDetail(reviewNo);
 		String writer = reviewVo.getOrDefault("review_writer", "").toString();
-		String content_user = principal.getName();
 		int viewCount = Integer.parseInt(reviewVo.getOrDefault("view_count", "").toString());
-		int likeCount = Integer.parseInt(reviewVo.getOrDefault("like_count", "").toString());
-//		int likeCheck = reviewService.likeCheck(map);
+		
+		int likeCount = reviewService.likeCount(reviewNo);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		MemberVO member =  memberService.selectMember(principal.getName());
+		String content_user = member.getMemId();
+		int user_no = member.getMemSeq();
+		map.put("review_no", reviewNo);
+		map.put("mem_no", user_no);
+		int likeCheck = reviewService.likeCheck(map);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		String regDate = reviewVo.getOrDefault("regDate", "").toString();
 		Date parseDate = sdf.parse(regDate);
-				
-//		System.err.println("like:"+ likeCheck);
-		
+		System.err.println(viewCount);
+		model.addAttribute("like_check", likeCheck);
 		model.addAttribute("like_count", likeCount);
 		model.addAttribute("view_Count", viewCount);
 		model.addAttribute("reviewNo", reviewNo);
