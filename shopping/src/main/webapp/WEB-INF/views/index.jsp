@@ -14,8 +14,8 @@
 	  <sec:authorize access="isAuthenticated()">
 		<button onclick="location.href='/logout'">로그아웃</button>
 		<button onclick="location.href='/member/memberMod?id=${ id }'">회원 정보 수정</button>
-		<button onclick="location.href='review/reviewList'">리뷰 목록</button>
 	  </sec:authorize>
+	  <button onclick="location.href='review/reviewList'">리뷰 목록</button>
 	</div>
 </body>
 </html>

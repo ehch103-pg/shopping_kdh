@@ -51,5 +51,10 @@ public class MemberService implements UserDetailsService{
 		return memberVO;
 	}
 
+	public int checkMember(String userId) {
+		// TODO Auto-generated method stub
+		return memberMapper.checkMember(userId);
+	}
+
 
 }

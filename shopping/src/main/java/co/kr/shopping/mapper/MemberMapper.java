@@ -14,4 +14,6 @@ public interface MemberMapper  {
 	
 	void insertMember(MemberVO memberVO);
 
+	int checkMember(@Param("userID") String userId);
+
 }

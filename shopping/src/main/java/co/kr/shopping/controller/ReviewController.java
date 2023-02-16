@@ -81,7 +81,9 @@ public class ReviewController {
 		Map<String, Object> result = new HashMap<>();
 		
 		ReviewVO reviewVO = new ReviewVO();
+		
 		reviewVO.setReviewTitle(param.getOrDefault("title", "").toString());
+		reviewVO.setReviewWriter(param.getOrDefault("writer", "").toString());
 		
 		int check = reviewService.saveReview(reviewVO);
 		
@@ -102,13 +104,13 @@ public class ReviewController {
 	public Map<String, Object> modifyReview(@RequestBody Map<String, Object> param){
 		Map<String, Object> result = new HashMap<>();
 		
-		ReviewVO reviewVo = new ReviewVO();
-		String title = param.get("title").toString();
-		
+		String reviewNo = param.getOrDefault("", "").toString();
 		int check = reviewService.updateReview(reviewVo);
 		
 		if(check > 0) {
-			
+			result.put("msg", "리뷰가 수정되었습니다.");
+			result.put("result", "S");
+			result.put("url", "/review/reviewDetail"+);
 		}
 		
 		return result;
@@ -154,7 +156,7 @@ public class ReviewController {
 	@GetMapping("/reviewDetail")
 	public String reviewDetail(Model model, @RequestParam(required = false) Map<String, Object> param, Principal principal, HttpServletRequest request) 
 			throws ParseException {
-		
+		int likeCheck;
 		String reviewNo = param.getOrDefault("id", "").toString();
 		reviewService.updateViewCount(reviewNo);
 		Map<String, Object> reviewVo = reviewService.selectReviewDetail(reviewNo);
@@ -162,26 +164,29 @@ public class ReviewController {
 		int viewCount = Integer.parseInt(reviewVo.getOrDefault("view_count", "").toString());
 		
 		int likeCount = reviewService.likeCount(reviewNo);
-		
-		Map<String, Object> map = new HashMap<>();
-		
-		MemberVO member =  memberService.selectMember(principal.getName());
-		String content_user = member.getMemId();
-		int user_no = member.getMemSeq();
-		map.put("review_no", reviewNo);
-		map.put("mem_no", user_no);
-		int likeCheck = reviewService.likeCheck(map);
-		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		String regDate = reviewVo.getOrDefault("regDate", "").toString();
 		Date parseDate = sdf.parse(regDate);
-		System.err.println(viewCount);
-		model.addAttribute("like_check", likeCheck);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		if(principal != null) {
+			MemberVO member =  memberService.selectMember(principal.getName());
+			String content_user = member.getMemId();
+			int user_no = member.getMemSeq();
+		
+			map.put("review_no", reviewNo);
+			map.put("mem_no", user_no);
+			likeCheck = reviewService.likeCheck(map);
+			model.addAttribute("check", content_user);
+			model.addAttribute("like_check", likeCheck);
+		}
+
 		model.addAttribute("like_count", likeCount);
 		model.addAttribute("view_Count", viewCount);
 		model.addAttribute("reviewNo", reviewNo);
-		model.addAttribute("check", content_user);
 		model.addAttribute("title", reviewVo.getOrDefault("review_title", "").toString());
+		model.addAttribute("content", reviewVo.getOrDefault("review_content", "").toString());
 		model.addAttribute("writer", writer);
 		model.addAttribute("regDate", parseDate);
 		

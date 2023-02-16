@@ -23,7 +23,7 @@ public class HomeController {
 			id = principal.getName();
 			model.addAttribute("id", id);
 		}
-		String uri = request.getRequestURI();
+		
 		return "index";
 	}
 	

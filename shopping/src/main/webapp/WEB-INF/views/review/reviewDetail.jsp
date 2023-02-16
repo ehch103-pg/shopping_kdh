@@ -17,7 +17,7 @@
     </tr>
     <tr>
      <td><label>제목 </label></td>
-     <td><input type="text" id="title" name="title" value="${ title }"></td>
+     <td><p>${ title }</p></td>
     </tr>
     <tr>
      <td><label>작성자 </label></td>
@@ -29,18 +29,19 @@
     </tr>
     <tr>
      <td><label>리뷰 내용 </label></td>
-     <td><textarea id="review_content" rows="40" cols="120">${ content }</textarea></td>
+     <td><p>${ content }</p></td>
     </tr>
     <tr>
      <td><label>상품명 </label></td>
-     <td><span id="product_info">${ product }</span></td>
+     <td><span id="product_info">${ product.product_name }</span></td>
     </tr>
    </tbody>
   </table>
   <div class="like-container">
    <label> 좋아요: </label> 
    <label id="like_count"> ${ like_count } </label>
-   <button id="likeBtn">
+   <c:if test="${ like_check != null }">
+    <button id="likeBtn">
     <c:choose>
      <c:when test="${ like_check == 0}">
       <i class="fa-regular fa-heart"></i>
@@ -50,6 +51,7 @@
    	 </c:otherwise>
    	</c:choose>
    </button>
+  </c:if>
    <input type="hidden" value="${ like_check } " id="like_check">
   </div>
 </div>
@@ -89,39 +91,6 @@
 			likeChange(data);
 		}
 	});
-	
-	function likeChange(data){
-		var like_count = 0;
-		var htmlTag = "";
-		var like_check = document.getElementById('like_check');
-		$.ajax({
-			  type : 'post'
-			, url  : '/review/LikeProc' 
-			, data : JSON.stringify(data)
-			, cache : false
-			, contentType: 'application/json'
-			, success : function(data){
-				like_count = data.like_count;
-				if(data.result == 'S'){
-					if(data.like_switch == '0'){
-						htmlTag += '<i class="fa-regular fa-heart"></i>';
-						alert('좋아요가 취소되었습니다.');
-					}else {
-						htmlTag += '<i class="fa-solid fa-heart"></i>';
-						alert('좋아요가 반영되었습니다.');
-					}
-					like_check.value = like_count;
-					$("#like_count").html(like_count);
-					$("#likeBtn").html(htmlTag);
-				}else {
-					alert('좋아요가 적용되지 않았습니다.')
-				}
-			}
-			, error   : function(xhr){
-				console.log(xhr);
-			}
-		});
-	}
 </script>
 
 

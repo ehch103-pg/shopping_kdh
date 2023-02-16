@@ -46,7 +46,7 @@ public class WebSecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
         .authorizeRequests() // 요청에 대한 권한 설정
-        .antMatchers("/","/login", "/member/memberReg","/loginFail").permitAll()
+        .antMatchers("/","/login", "/member/memberReg","/loginFail", "/member/memberCheck", "/review/reviewList", "/review/reviewDetail").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN")
         .anyRequest().authenticated();
 

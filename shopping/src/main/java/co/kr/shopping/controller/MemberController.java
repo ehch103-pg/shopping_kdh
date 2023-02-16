@@ -24,23 +24,35 @@ public class MemberController {
 	@Autowired
 	MemberService memberService;
 	
+	
+	@PostMapping("/memberCheck")
+	@ResponseBody
+	public Map<String, Object> checkId(@RequestBody Map<String, Object> param){
+		String userId = (String)param.getOrDefault("Id", "");
+		Map<String, Object> result = new HashMap<>();
+		int member_check = memberService.checkMember(userId);
+		if(member_check == 1) {
+			result.put("result", "Exist");
+		}else {
+			result.put("result", "None");
+		}
+		return result;
+	}
+	
 	@PostMapping("/memberReg")
 	public Map<String, Object> saveMember(@RequestParam Map<String, Object> param) {
 		String id = (String)param.get("mem_id");
 		Map<String, Object> result = new HashMap<>();
 		
-		if(memberService.selectMember(id) != null) {
-			result.put("result", "F");
-		}else {
-			MemberVO member = new MemberVO();
-			member.setMemId(id);
-			member.setMemPw((String)param.get("mem_pw"));
-			member.setMemEmail((String)param.get("mem_email"));
-			member.setMemName((String)param.get("mem_name"));
-			member.setMemGen((String)param.get("mem_gen"));
-			memberService.JoinorModifyByMember(member, 1);
-			result.put("result", "S");
-		}
+		MemberVO member = new MemberVO();
+		member.setMemId(id);
+		member.setMemPw((String)param.get("mem_pw"));
+		member.setMemEmail((String)param.get("mem_email"));
+		member.setMemName((String)param.get("mem_name"));
+		member.setMemGen((String)param.get("mem_gen"));
+		memberService.JoinorModifyByMember(member, 1);
+		result.put("msg", "회원가입을 성공하였습니다. 축하드립니다!");
+		
 		return result;
 		
 	}
@@ -49,8 +61,7 @@ public class MemberController {
 	public String modify(Model model, @RequestParam Map<String, Object> param) {
 		String Id = (String)param.getOrDefault("id", "");
 		MemberVO memberVO = memberService.selectMember(Id);
-		
-		
+				
 		model.addAttribute("mem_id", memberVO.getMemId());
 		model.addAttribute("mem_email", memberVO.getMemEmail());
 		model.addAttribute("mem_name", memberVO.getMemName());

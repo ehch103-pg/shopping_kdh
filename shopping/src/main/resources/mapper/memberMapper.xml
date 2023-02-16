@@ -8,6 +8,12 @@
 		 WHERE mem_id = #{ userID }
 	</select>
 	
+	<select id="checkMember" resultType="Integer">
+		SELECT IFNULL(COUNT(1), 0)
+		  FROM member
+		 WHERE mem_id = #{ userID }
+	</select>
+	
 	<insert id="insertMember" parameterType="co.kr.shopping.vo.MemberVO">
 		INSERT INTO member
 		(mem_id, mem_pw, mem_email, reg_Date, mem_name, mem_gen, role, ch_id)

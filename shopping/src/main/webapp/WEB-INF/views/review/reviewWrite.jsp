@@ -52,6 +52,7 @@
    </tr>
    </tbody>
   </table>
+  <input type="hidden" id="review_No" value="${ review_No }"> 
   <div class="button-area-write">
   <c:if test="${ check eq 'W' }">
     <button type="button" class="btn btn-primary" id="register">등록</button>
@@ -67,7 +68,7 @@
 	let writer = $("#writer_style").innerText;
 	let content = $("#review_content").innerText;
 	let product = $("#product_info").innerText;
-	
+	let reviewNo = $("#review_No").val();
 	let data = { 'title':title, 'writer':writer, 'content':content, 'product':product };
 	$("#register").on("click", function(){
 	  if (confirm("등록 하시기 전에 한 번 더 확인하시겠습니까?")) {
