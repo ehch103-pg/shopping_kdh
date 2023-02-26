@@ -21,7 +21,7 @@ public class CustomFailureHandler extends SimpleUrlAuthenticationFailureHandler 
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
-		String errorMsg;
+		String errorMsg = "";
 		if(exception instanceof BadCredentialsException) {
 			errorMsg = "아이디 또는 비밀번호가 맞지 않습니다. 확인해주시기 바랍니다";
 		}else if(exception instanceof InternalAuthenticationServiceException) {

@@ -21,11 +21,11 @@
    <tbody>
    <tr>
     <td><label>제목 </label></td>
-    <td><input type="text" id="title" name="title" value="${ review.review_title }"></td>
+    <td><input type="text" id="title" name="title" value="${ review.review_title }" required></td>
    </tr>
    <tr>
     <td><label>작성자 </label></td>
-    <td><p id="writer_style">${ review.review_writer }</p></td>
+    <td><p id="writer">${ review.review_writer }</p></td>
    </tr>
    <tr>
     <td><label>작성일 </label></td>
@@ -48,12 +48,15 @@
    </tr>
    <tr>
     <td><label>상품명 </label></td>
-    <td><span id="product_info">${ review_product_Id }</span></td>
+    <td>
+      <a href="/product/product_info?id=${ product_cd }"><span id="product_info">${ review.product_name }</span></a>
+    </td>
    </tr>
    </tbody>
   </table>
-  <input type="hidden" id="review_No" value="${ review_No }"> 
-  <div class="button-area-write">
+  <input type="hidden" id="review_No" value="${ id }">
+  <span>비밀 여부 <input type="checkbox" id="lock"></span>
+  <div class="button-area-write" align="center">
   <c:if test="${ check eq 'W' }">
     <button type="button" class="btn btn-primary" id="register">등록</button>
   </c:if>
@@ -64,15 +67,30 @@
   </div>
 </div>
 <script type="text/javascript">
-	let title = $("#title").val();
-	let writer = $("#writer_style").innerText;
-	let content = $("#review_content").innerText;
-	let product = $("#product_info").innerText;
-	let reviewNo = $("#review_No").val();
-	let data = { 'title':title, 'writer':writer, 'content':content, 'product':product };
+    function saveOrModify(){
+	  let title = $("#title").val();
+	  let writer = $("#writer").innerText;
+	  let content = $("#review_content").innerText;
+	  let product = $("#product_info").innerText;
+	  let reviewNo = $("#review_No").val();
+	  var lockVal;
+	  let data = { 'title':title, 'writer':writer, 'content':content, 'product':product, 'reviewNo':reviewNo, 'lock': lockVal };
+	  sendUrl()
+    }
+	$("#lock").on("click", function(){
+		var lock = document.getElementById('lock');
+		if(lock.checked){
+			lockVal = 'Y'
+		}else {
+			lockVal = 'N';
+		}
+		console.log(lockVal);
+	});
+	
 	$("#register").on("click", function(){
 	  if (confirm("등록 하시기 전에 한 번 더 확인하시겠습니까?")) {
-		 sendUrl('/review/regRev', data);
+		   console.log(data);
+		  //sendUrl('/review/regRev', data);
 	  }
 	});
 	

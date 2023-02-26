@@ -33,7 +33,11 @@
     </tr>
     <tr>
      <td><label>상품명 </label></td>
-     <td><span id="product_info">${ product.product_name }</span></td>
+     <td>
+        <a href="/product/product_info?id=${ product_cd }">
+         <span id="product_info">${ product_name }</span>
+        </a>
+     </td>
     </tr>
    </tbody>
   </table>

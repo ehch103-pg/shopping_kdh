@@ -5,7 +5,6 @@
 
 <%@ include file="include/header.jsp" %>
 
-<label>홈</label>
 	<div>
 	  <sec:authorize access="isAnonymous()">
 		<button onclick="location.href='/login'">로그인</button>

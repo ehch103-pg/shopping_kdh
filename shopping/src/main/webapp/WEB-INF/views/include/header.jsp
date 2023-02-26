@@ -20,3 +20,19 @@
  	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
 	<script src="${pageContext.request.contextPath}/js/custom.js"></script>
+	<header>
+	 <nav class="navbar navbar-expand-lg navbar-light bg-light">
+	  <div class="container-fluid">
+	   <div class="navbar-header">
+	    <a class="navbar-brand" href="#">홈</a>
+	   </div>
+	   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      	<ul class="nav navbar-nav navbar-right">
+      	 <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+         </li>
+      	</ul>
+       </div>
+	  </div>
+	 </nav>
+	</header>

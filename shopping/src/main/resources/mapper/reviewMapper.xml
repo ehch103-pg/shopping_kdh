@@ -41,10 +41,13 @@
   		   , A.view_count
   		   , DATE_FORMAT(A.review_write_date, "%Y-%m-%d %H:%i:%s") AS regDate
   		   , A.review_product_Id
+  		   , C.product_name
   	  FROM  review  A
-  	      , member  C
+  	      , member  B
+  	      , product C
   	 WHERE A.review_no = #{ reviewNo }
-  	   AND A.review_writer = C.mem_id 
+  	   AND A.review_writer = B.mem_id
+  	   AND A.review_product_Id = C.product_Id
   	 GROUP BY A.review_no   
   </select>
   
@@ -68,7 +71,26 @@
   	   AND mem_no = #{mem_no}
   </select>
   
-   <insert id="insertReviewLike" parameterType="map">
+  <insert id="insertReview" parameterType="co.kr.shopping.vo.ReviewVO">
+  	INSERT INTO review
+	(review_title, review_writer, review_write_date, review_content, review_product_Id, review_ch_date 
+	 <if test="reviewLock != null">
+	   , review_lock
+	 </if>
+	)
+  	VALUES 
+  	(
+  	  #{reviewTitle}, #{reviewWriter}, now(), #{reviewContents}, #{reviewProductId}, now()
+  	 <if test="reviewLock != null">
+  	  , #{reviewLock}
+  	 </if>
+  	)
+  </insert>
+  
+  <update id="updateReview" parameterType="co.kr.shopping.vo.ReviewVO">
+  </update>
+  
+  <insert id="insertReviewLike" parameterType="map">
    	INSERT INTO like_content(like_check, mem_no, review_no)
    	VALUES(#{like_switch}, #{mem_no}, #{review_no})
   </insert>

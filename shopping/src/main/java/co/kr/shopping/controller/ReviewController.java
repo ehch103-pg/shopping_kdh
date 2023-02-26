@@ -69,8 +69,13 @@ public class ReviewController {
 		String reviewNo = param.getOrDefault("id", "").toString();
 		
 		Map<String, Object> reviewVo = reviewService.selectReviewDetail(reviewNo);
-		System.err.println(reviewVo);
+		if(reviewVo == null) {
+			model.addAttribute("check", "W");
+		}else {
+			model.addAttribute("check", "M");
+		}
 		
+		model.addAttribute("id", reviewNo);
 		model.addAttribute("review", reviewVo);
 		return "review/reviewWrite";
 	}
@@ -84,6 +89,9 @@ public class ReviewController {
 		
 		reviewVO.setReviewTitle(param.getOrDefault("title", "").toString());
 		reviewVO.setReviewWriter(param.getOrDefault("writer", "").toString());
+		reviewVO.setReviewContents(param.getOrDefault("content","").toString());
+		reviewVO.setReviewProductId(param.getOrDefault("product","").toString());
+		reviewVO.setReviewLock(param.getOrDefault("lock","").toString());
 		
 		int check = reviewService.saveReview(reviewVO);
 		
@@ -104,13 +112,29 @@ public class ReviewController {
 	public Map<String, Object> modifyReview(@RequestBody Map<String, Object> param){
 		Map<String, Object> result = new HashMap<>();
 		
-		String reviewNo = param.getOrDefault("", "").toString();
+		String reviewNo = param.getOrDefault("reviewNo", "").toString();
+		String review_title = param.getOrDefault("title", "").toString();
+		String review_writer = param.getOrDefault("writer", "").toString();
+		String review_content = param.getOrDefault("content", "").toString();
+		String review_product = param.getOrDefault("product", "").toString();
+		String review_lock = param.getOrDefault("lock", "").toString();
+		
+		ReviewVO reviewVo = new ReviewVO();
+		reviewVo.setReviewTitle(review_title);
+		reviewVo.setReviewWriter(review_writer);
+		reviewVo.setReviewContents(review_content);
+		reviewVo.setReviewProductId(review_product);
+		reviewVo.setReviewLock(review_lock);
+		
 		int check = reviewService.updateReview(reviewVo);
 		
 		if(check > 0) {
 			result.put("msg", "리뷰가 수정되었습니다.");
 			result.put("result", "S");
-			result.put("url", "/review/reviewDetail"+);
+			result.put("url", "/review/reviewDetail"+reviewNo);
+		}else {
+			result.put("msg", "리뷰가 정상적으로 수정되지 않았습니다. 다시 시도해주시기 바랍니다.");
+			result.put("result", "F");
 		}
 		
 		return result;
@@ -181,7 +205,7 @@ public class ReviewController {
 			model.addAttribute("check", content_user);
 			model.addAttribute("like_check", likeCheck);
 		}
-
+		System.err.println(reviewVo);
 		model.addAttribute("like_count", likeCount);
 		model.addAttribute("view_Count", viewCount);
 		model.addAttribute("reviewNo", reviewNo);
@@ -189,6 +213,8 @@ public class ReviewController {
 		model.addAttribute("content", reviewVo.getOrDefault("review_content", "").toString());
 		model.addAttribute("writer", writer);
 		model.addAttribute("regDate", parseDate);
+		model.addAttribute("product_cd", reviewVo.getOrDefault("review_product_Id", "").toString());
+		model.addAttribute("product_name", reviewVo.getOrDefault("product_name", "").toString());
 		
 		return "review/reviewDetail";
 	}

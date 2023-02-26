@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="co.kr.shopping.mapper.ProductMapper">
+	<select id="selectProductList" resultType="co.kr.shopping.vo.ProductVO">
+		SELECT product_Id
+		  FROM product 
+		<if test="keyword neq null OR keyword neq ''">  
+		 WHERE product_name LIKE CONCAT('%', #{keyword} ,'%')
+		   OR  product_regDate LIKE CONCAT('%', #{keyword}, '%')
+		   OR  product_price LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		ORDER BY product_Id ASC, product_regDate DESC
+		LIMIT #{paging.firstRecordOnPage}, #{paging.recordCountPerPage}
+	</select>
+	
+	<insert id="insertProduct" parameterType="map">
+		INSERT 
+		INTO product (product_Id, product_name, product_intro, product_price, product_price) 
+		VALUES ()
+	</insert>
+</mapper>

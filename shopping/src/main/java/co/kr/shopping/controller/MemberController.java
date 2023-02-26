@@ -1,5 +1,6 @@
 package co.kr.shopping.controller;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +24,6 @@ public class MemberController {
 	
 	@Autowired
 	MemberService memberService;
-	
 	
 	@PostMapping("/memberCheck")
 	@ResponseBody
@@ -50,7 +50,7 @@ public class MemberController {
 		member.setMemEmail((String)param.get("mem_email"));
 		member.setMemName((String)param.get("mem_name"));
 		member.setMemGen((String)param.get("mem_gen"));
-		memberService.JoinorModifyByMember(member, 1);
+		memberService.JoinorModifyByMember(member, 1, "U");
 		result.put("msg", "회원가입을 성공하였습니다. 축하드립니다!");
 		
 		return result;
@@ -73,13 +73,16 @@ public class MemberController {
 	
 	@PostMapping("/memberModProc")
 	public String changeMember(@RequestParam Map<String, Object> param){
+		String member_Id = (String)param.getOrDefault("mem_id", "").toString();
+		String userCheck = memberService.selectMember(member_Id).getRole();
+		
 		MemberVO memberVO = new MemberVO();
-		memberVO.setMemId((String)param.getOrDefault("mem_id", ""));
+		memberVO.setMemId(member_Id);
 		memberVO.setMemPw((String)param.getOrDefault("mem_pw", ""));
 		memberVO.setMemEmail((String)param.getOrDefault("mem_email", ""));
 		memberVO.setMemName((String)param.getOrDefault("mem_name", ""));
 		memberVO.setMemGen((String)param.getOrDefault("mem_gen", ""));
-		memberService.JoinorModifyByMember(memberVO, 2);
+		memberService.JoinorModifyByMember(memberVO, 2, userCheck);
 		
 		return "login";
 	}
