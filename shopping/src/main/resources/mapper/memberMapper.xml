@@ -7,7 +7,7 @@
 		  FROM member
 		 WHERE mem_id = #{ userID }
 	</select>
-	
+
 	<select id="checkMember" resultType="Integer">
 		SELECT IFNULL(COUNT(1), 0)
 		  FROM member
@@ -16,9 +16,9 @@
 	
 	<insert id="insertMember" parameterType="co.kr.shopping.vo.MemberVO">
 		INSERT INTO member
-		(mem_id, mem_pw, mem_email, reg_Date, mem_name, mem_gen, role, ch_id)
+		(mem_id, mem_pw, mem_email, reg_Date, mem_name, mem_gen, role)
 		VALUES 
-		(#{memId}, #{memPw}, #{memEmail}, now(), #{memName}, #{memGen}, #{role}, #{chId})
+		(#{memId}, #{memPw}, #{memEmail}, now(), #{memName}, #{memGen}, #{role})
 	</insert>
 	
 	<update id="updateMember" parameterType="co.kr.shopping.vo.MemberVO">
@@ -29,7 +29,14 @@
 		       , ch_date = now()
 		       , mem_name = #{memName}
 		       , mem_gen = #{memGen}
-		       , ch_id = #{chId}
 		 WHERE mem_id = #{memId}
+	</update>
+	
+	<update id="deleteMember" parameterType="string">
+		UPDATE member
+		   SET del_yn = 'Y',
+		   	   del_time = now()
+		   	   role = 'RETIRE'
+		  WHERE mem_id = #{userID}
 	</update>
 </mapper>

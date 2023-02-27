@@ -37,7 +37,7 @@
     	<c:out value="${today}"/>
      </c:when>
      <c:otherwise>
-     	<fmt:formatDate value="${ review.regDate }" pattern="yyyy-MM-dd HH:mm:ss" />
+     	<fmt:formatDate value="${ regDate }" pattern="yyyy-MM-dd HH:mm:ss" />
      </c:otherwise>
     </c:choose>
     </td>
@@ -67,15 +67,16 @@
   </div>
 </div>
 <script type="text/javascript">
-    function saveOrModify(){
+	var lockVal;
+    function saveOrModify(url){
 	  let title = $("#title").val();
-	  let writer = $("#writer").innerText;
-	  let content = $("#review_content").innerText;
-	  let product = $("#product_info").innerText;
+	  let writer = document.getElementById("writer").innerHTML;
+	  let content = document.getElementById("review_content").innerHTML;
+	  let product = document.getElementById("product_info").innerHTML;
 	  let reviewNo = $("#review_No").val();
-	  var lockVal;
 	  let data = { 'title':title, 'writer':writer, 'content':content, 'product':product, 'reviewNo':reviewNo, 'lock': lockVal };
-	  sendUrl()
+	  console.log(data);
+	  sendUrl(url, data);
     }
 	$("#lock").on("click", function(){
 		var lock = document.getElementById('lock');
@@ -89,13 +90,12 @@
 	
 	$("#register").on("click", function(){
 	  if (confirm("등록 하시기 전에 한 번 더 확인하시겠습니까?")) {
-		   console.log(data);
-		  //sendUrl('/review/regRev', data);
+		  saveOrModify('/review/regRev');
 	  }
 	});
 	
 	$("#modify").on("click", function(){
-		sendUrl('/review/modRev', data);
+		saveOrModify('/review/modRev');
 	});
 	
 </script>

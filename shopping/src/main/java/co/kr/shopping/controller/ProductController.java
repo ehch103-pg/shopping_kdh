@@ -1,6 +1,8 @@
 package co.kr.shopping.controller;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,9 +11,13 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import co.kr.shopping.service.ProductService;
 import co.kr.shopping.vo.PaginationVO;
@@ -48,6 +54,15 @@ public class ProductController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/productReg")
 	public String productReg(Model model) {
+		
 		return rootUrl + "/productReg";
+	}
+	
+	@PostMapping
+	@ResponseBody
+	public Map<String, Object> productUpload(@RequestParam(required = false) MultipartFile files, @RequestParam Map<String, Object> param, Model model) {
+		Map<String, Object> result = new HashMap<String, Object>();
+	
+		return result;
 	}
 }

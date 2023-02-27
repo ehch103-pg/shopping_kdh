@@ -16,4 +16,6 @@ public interface MemberMapper  {
 
 	int checkMember(@Param("userID") String userId);
 
+	void deleteMember(@Param("userID") String userID);
+
 }

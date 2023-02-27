@@ -2,7 +2,8 @@ function sendUrl(url, data){
 	$.ajax({
 		  type : 'post'
 		, url  : url
-		, data : data
+		, data : JSON.stringify(data)
+		, contentType: "application/json; charset=utf-8"
 		, cache : false
 		, success : function(data){
 			if(data.result == 'S'){
@@ -26,6 +27,13 @@ function checkPassword(data){
 		document.getElementById("PWcheck").focus(); 
 	}else {
 		check.innerHTML = '';
+	}
+}
+
+function fileExpChecker(expcd, fileExp){
+	if(expcd != fileExp){
+		alert('허용된 확장자가 아닙니다.');
+		return false;
 	}
 }
 

@@ -4,10 +4,8 @@
 <%@ include file="../include/header.jsp" %>
 
 <div class="container">
-  <div>
-  	
-  </div>
 </div>
+
 <script type="text/javascript">
 	
 </script>

@@ -28,9 +28,9 @@
 	   </div>
 	   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       	<ul class="nav navbar-nav navbar-right">
-      	 <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-         </li>
+      	 <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">상품</a></li>
+         <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">리뷰</a></li>
+         <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">회원정보</a></li>
       	</ul>
        </div>
 	  </div>

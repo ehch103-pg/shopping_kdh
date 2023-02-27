@@ -60,6 +60,7 @@ public class WebSecurityConfig {
             .passwordParameter("password")
         .and()
             .logout()
+            .invalidateHttpSession(true)
         .and()
             .csrf().disable();
 

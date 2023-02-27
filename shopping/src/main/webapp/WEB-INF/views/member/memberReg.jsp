@@ -54,11 +54,7 @@
 		});
 	
 		$("#regBtn").on("click", function() {
-			
-			if(){
 				
-			}
-			else {	
 				let form = $("#memFrm").serialize();
 				let url = '/member/memberReg'
 				$.ajax({
@@ -78,7 +74,6 @@
 					   console.log(xhr);
 				   }
 				});
-			}
 		});
 	</script>
 </body>

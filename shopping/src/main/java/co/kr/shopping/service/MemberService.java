@@ -47,7 +47,6 @@ public class MemberService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
 		MemberVO memberVO = memberMapper.selectMemberInfo(username);
-		System.err.println(memberVO);
 		if(memberVO==null){
             throw new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다.");
         }
@@ -58,6 +57,11 @@ public class MemberService implements UserDetailsService{
 	public int checkMember(String userId) {
 		// TODO Auto-generated method stub
 		return memberMapper.checkMember(userId);
+	}
+
+	public void deleteMember(String member_Id) {
+		// TODO Auto-generated method stub
+		memberMapper.deleteMember(member_Id);
 	}
 
 

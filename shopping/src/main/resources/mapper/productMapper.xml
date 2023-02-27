@@ -16,7 +16,7 @@
 	
 	<insert id="insertProduct" parameterType="map">
 		INSERT 
-		INTO product (product_Id, product_name, product_intro, product_price, product_price) 
-		VALUES ()
+		INTO product (product_Id, product_name, product_intro, product_price, product_regDate) 
+		VALUES (#{productId}, #{productName}, #{productIntro}, #{productPrice}, SYSDATE)
 	</insert>
 </mapper>

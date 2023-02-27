@@ -40,10 +40,21 @@
 	   </div>
 	  </div>
 	  <div id="button-area" align="center">
-	  	<input type="submit" class="btn btn-primary" id="modBtn" value="수정">
+	  	<input type="button" class="btn btn-primary" id="modBtn" value="수정">
 	  	<input type="reset" class="btn btn-danger" value="취소">
 	  </div>
 	 </form>
 	</div>
+   <script type="text/javascript">
+	  $("#modBtn").on("click", function(){
+   		let id = $("#mem_id").val();
+   		let pw = $("#mem_pw").val();
+   		let email = $("#mem_email").val();
+   		let name = $("#mem_name").val();
+   		let gen = $("#mem_gen").val();
+	  	var data = {'mem_id': id, 'mem_pw' : pw, 'mem_name' : name, 'mem_email' : email, 'mem_gen' : gen}
+   		sendUrl('/member/memberModProc', data);
+	  });
+   </script>
 </body>
 </html>

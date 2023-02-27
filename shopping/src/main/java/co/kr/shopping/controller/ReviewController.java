@@ -65,7 +65,7 @@ public class ReviewController {
 	}
 	
 	@GetMapping("/reviewWrite")
-	public String reviewWrite(@RequestParam(required = false) Map<String, Object> param, Model model) {
+	public String reviewWrite(@RequestParam(required = false) Map<String, Object> param, Model model) throws Exception {
 		String reviewNo = param.getOrDefault("id", "").toString();
 		
 		Map<String, Object> reviewVo = reviewService.selectReviewDetail(reviewNo);
@@ -75,8 +75,13 @@ public class ReviewController {
 			model.addAttribute("check", "M");
 		}
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String regDate = reviewVo.getOrDefault("regDate", "").toString();
+		Date parseDate = sdf.parse(regDate);
+		
 		model.addAttribute("id", reviewNo);
 		model.addAttribute("review", reviewVo);
+		model.addAttribute("regDate", parseDate);
 		return "review/reviewWrite";
 	}
 	
@@ -92,7 +97,7 @@ public class ReviewController {
 		reviewVO.setReviewContents(param.getOrDefault("content","").toString());
 		reviewVO.setReviewProductId(param.getOrDefault("product","").toString());
 		reviewVO.setReviewLock(param.getOrDefault("lock","").toString());
-		
+				
 		int check = reviewService.saveReview(reviewVO);
 		
 		if(check > 0) {
@@ -112,7 +117,7 @@ public class ReviewController {
 	public Map<String, Object> modifyReview(@RequestBody Map<String, Object> param){
 		Map<String, Object> result = new HashMap<>();
 		
-		String reviewNo = param.getOrDefault("reviewNo", "").toString();
+		int reviewNo = Integer.parseInt((param.getOrDefault("reviewNo", "").toString()));
 		String review_title = param.getOrDefault("title", "").toString();
 		String review_writer = param.getOrDefault("writer", "").toString();
 		String review_content = param.getOrDefault("content", "").toString();
@@ -120,18 +125,22 @@ public class ReviewController {
 		String review_lock = param.getOrDefault("lock", "").toString();
 		
 		ReviewVO reviewVo = new ReviewVO();
+		reviewVo.setReviewNo(reviewNo);
 		reviewVo.setReviewTitle(review_title);
 		reviewVo.setReviewWriter(review_writer);
 		reviewVo.setReviewContents(review_content);
 		reviewVo.setReviewProductId(review_product);
 		reviewVo.setReviewLock(review_lock);
+	
+		System.out.println(reviewVo.getReviewLock());
 		
 		int check = reviewService.updateReview(reviewVo);
+		
 		
 		if(check > 0) {
 			result.put("msg", "리뷰가 수정되었습니다.");
 			result.put("result", "S");
-			result.put("url", "/review/reviewDetail"+reviewNo);
+			result.put("url", "/review/reviewDetail?id="+reviewNo);
 		}else {
 			result.put("msg", "리뷰가 정상적으로 수정되지 않았습니다. 다시 시도해주시기 바랍니다.");
 			result.put("result", "F");
@@ -184,6 +193,7 @@ public class ReviewController {
 		String reviewNo = param.getOrDefault("id", "").toString();
 		reviewService.updateViewCount(reviewNo);
 		Map<String, Object> reviewVo = reviewService.selectReviewDetail(reviewNo);
+
 		String writer = reviewVo.getOrDefault("review_writer", "").toString();
 		int viewCount = Integer.parseInt(reviewVo.getOrDefault("view_count", "").toString());
 		

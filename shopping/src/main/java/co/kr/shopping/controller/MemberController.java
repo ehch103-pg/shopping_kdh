@@ -40,6 +40,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("/memberReg")
+	@ResponseBody
 	public Map<String, Object> saveMember(@RequestParam Map<String, Object> param) {
 		String id = (String)param.get("mem_id");
 		Map<String, Object> result = new HashMap<>();
@@ -51,8 +52,7 @@ public class MemberController {
 		member.setMemName((String)param.get("mem_name"));
 		member.setMemGen((String)param.get("mem_gen"));
 		memberService.JoinorModifyByMember(member, 1, "U");
-		result.put("msg", "회원가입을 성공하였습니다. 축하드립니다!");
-		
+		result.put("result", "S");
 		return result;
 		
 	}
@@ -60,6 +60,7 @@ public class MemberController {
 	@GetMapping("/memberMod")
 	public String modify(Model model, @RequestParam Map<String, Object> param) {
 		String Id = (String)param.getOrDefault("id", "");
+		System.out.println(Id);
 		MemberVO memberVO = memberService.selectMember(Id);
 				
 		model.addAttribute("mem_id", memberVO.getMemId());
@@ -69,13 +70,13 @@ public class MemberController {
 		
 		return "member/memberMod";
 	}
-	
-	
-	@PostMapping("/memberModProc")
-	public String changeMember(@RequestParam Map<String, Object> param){
-		String member_Id = (String)param.getOrDefault("mem_id", "").toString();
-		String userCheck = memberService.selectMember(member_Id).getRole();
 		
+	@PostMapping("/memberModProc")
+	@ResponseBody
+	public Map<String, Object> changeMember(@RequestBody Map<String, Object> param){
+		Map<String, Object> result = new HashMap<String, Object>();
+		String member_Id = param.getOrDefault("mem_id", "").toString();
+		String userCheck = memberService.selectMember(member_Id).getRole();
 		MemberVO memberVO = new MemberVO();
 		memberVO.setMemId(member_Id);
 		memberVO.setMemPw((String)param.getOrDefault("mem_pw", ""));
@@ -84,6 +85,29 @@ public class MemberController {
 		memberVO.setMemGen((String)param.getOrDefault("mem_gen", ""));
 		memberService.JoinorModifyByMember(memberVO, 2, userCheck);
 		
-		return "login";
+		result.put("result", "S");
+		result.put("msg", "회원 정보가 수정되었습니다");
+		result.put("url", "/logout");
+		return result;
 	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/memberDel")
+	public String delete(Model model) {
+		return "member/memberDel";
+	}
+	
+	@PostMapping
+	@ResponseBody
+	public Map<String, Object> deleteMember(@RequestBody Map<String, Object> param){
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		String member_Id = (String)param.getOrDefault("Id", "");
+		memberService.deleteMember(member_Id);
+		
+		
+		return result;
+	}
+	
+	
 }

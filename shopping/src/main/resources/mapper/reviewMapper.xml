@@ -88,6 +88,14 @@
   </insert>
   
   <update id="updateReview" parameterType="co.kr.shopping.vo.ReviewVO">
+  	UPDATE review
+  	   SET review_title = #{reviewTitle},
+  	       review_writer = #{reviewWriter},
+  	       review_content = #{reviewContents},
+  	       review_product_Id = #{reviewProductId},
+  	  	   review_lock = #{reviewLock},
+  	       review_ch_date = now()
+  	 WHERE review_no = #{reviewNo}
   </update>
   
   <insert id="insertReviewLike" parameterType="map">
