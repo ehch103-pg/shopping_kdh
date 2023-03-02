@@ -16,16 +16,18 @@ public class ProductService {
 	@Autowired
 	ProductMapper productMapper;
 	
-	public List<ProductVO> ProductList(PaginationVO paging, Map<String, Object> param){
-		return productMapper.selectProductList(param, paging);
+	public List<ProductVO> ProductList(String keyword, PaginationVO paging){
+		return productMapper.selectProductList(keyword, paging);
 	}
 	
-	public ProductVO productDetail(String reviewNo) {
-		return productMapper.selectProductDetail(reviewNo);
-	}
 	
 	public void ProductRegister(ProductVO product) {
 		productMapper.insertProduct(product);
+	}
+
+	public ProductVO selectProductInfo(String product_id) {
+		// TODO Auto-generated method stub
+		return productMapper.selectProductDetail(product_id);
 	}
 	
 }

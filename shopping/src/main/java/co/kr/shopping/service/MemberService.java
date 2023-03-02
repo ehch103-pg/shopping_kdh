@@ -18,10 +18,8 @@ public class MemberService implements UserDetailsService{
 	@Autowired
 	private MemberMapper memberMapper;
 	
-	
 	@Transactional
-	public void JoinorModifyByMember(MemberVO memberVO, int code, String userCheck) {
-		
+	public int JoinorModifyByMember(MemberVO memberVO, int code, String userCheck) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		memberVO.setMemPw(passwordEncoder.encode(memberVO.getMemPw()));
 		memberVO.setChId(memberVO.getMemId());
@@ -31,9 +29,9 @@ public class MemberService implements UserDetailsService{
 			}else {
 				memberVO.setRole("USER");
 			}
-		    memberMapper.insertMember(memberVO);
-		}else if(code == 2) {
-			memberMapper.updateMember(memberVO);
+		    return memberMapper.insertMember(memberVO);
+		}else {
+			return memberMapper.updateMember(memberVO);
 		}
 	}
 	
@@ -59,9 +57,17 @@ public class MemberService implements UserDetailsService{
 		return memberMapper.checkMember(userId);
 	}
 
-	public void deleteMember(String member_Id) {
+	public int deleteMember(String member_Id, String member_Pw, MemberVO member) {
 		// TODO Auto-generated method stub
-		memberMapper.deleteMember(member_Id);
+		int check;
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		if(passwordEncoder.matches(member_Pw, member.getMemPw())) {
+			check = 1;
+			memberMapper.deleteMember(member_Id);
+		}else {
+			check = 0;
+		}
+		return check;
 	}
 
 

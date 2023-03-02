@@ -4,12 +4,49 @@
 <%@ include file="../include/header.jsp" %>
 
 <div class="container">
-  <div>
-  	
+  <div class="product-list">
+   <c:forEach var="products" items="${ products }">
+  	 <a href="/product/productDetail?id=${ products.productId }">
+  	   <img src="${ pageContext.request.contextPath }/imgShow?imgId=${ imgId }">
+  	   <span>${ products.productName }</span>
+  	 </a>
+   </c:forEach>
   </div>
+   <div id="pagination-field" class="text-center">
+   <nav>
+    <ul class="pagination">
+     <li class="page-item">
+      <c:if test="${ paging.currentPageNo > 1}">
+        <a class="page-link" href="#" onclick="onLoadList(${ paging.currentPageNo -1 })" aria-label="이전">
+         <span aria-hidden="true">&laquo;</span>
+        </a>
+      </c:if>
+     </li>
+     <c:forEach var="page" varStatus="i" begin="${ paging.firstPageOnIndex }" end="${ paging.lastPageOnIndex }">
+	     <li class="page-item">
+	       <a class="page-link" href="#" onclick="onLoadList(${ i.count })">
+	         ${ i.count } 
+	       </a>
+	     </li>
+	 </c:forEach> 
+	 <li class="page-item">
+	  <c:if test="${ paging.currentPageNo < paging.lastPageOnIndex }">
+        <a class="page-link" href="#" onclick="onLoadList(${ paging.currentPageNo + 1 })" aria-label="다음">
+         <span aria-hidden="true">&raquo;</span>
+        </a>
+      </c:if>
+     </li>
+    </ul>
+   </nav>
+  </div>
+  <sec:authorize access="hasRole('ADMIN')">
+   <button id="productReg">제품 등록</button>
+  </sec:authorize>
 </div>
 <script type="text/javascript">
-	
+	$("#productReg").on("click",function(){
+		location.href='/product/productReg';
+	});
 </script>
 </body>
 </html>

@@ -4,17 +4,13 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@ include file="include/header.jsp" %>
-
-	<div>
-	  <sec:authorize access="isAnonymous()">
-		<button onclick="location.href='/login'">로그인</button>
-		<button onclick="location.href='/member/memberReg'">회원 가입</button>
-	  </sec:authorize>
-	  <sec:authorize access="isAuthenticated()">
-		<button onclick="location.href='/logout'">로그아웃</button>
-		<button onclick="location.href='/member/memberMod?id=${ id }'">회원 정보 수정</button>
-	  </sec:authorize>
-	  <button onclick="location.href='review/reviewList'">리뷰 목록</button>
+ <div class="container">
+	<div class="main main-view">
+	  <p> 메인 페이지입니다. <br> 본 사이트가 처음이시라면 하단의 가이드 페이지를 클릭하시면 됩니다. </p>
 	</div>
+	<div class="main main-guideLine">
+	  <a href="/guideLine">가이드라인</a>
+	</div>
+ </div>
 </body>
 </html>

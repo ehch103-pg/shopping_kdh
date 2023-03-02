@@ -41,7 +41,8 @@
 	  </div>
 	  <div id="button-area" align="center">
 	  	<input type="button" class="btn btn-primary" id="modBtn" value="수정">
-	  	<input type="reset" class="btn btn-danger" value="취소">
+	  	<button type="button" class="btn btn-warning">취소</button>
+	  	<button type="button" class="btn btn-danger" id="retire">탈퇴</button>
 	  </div>
 	 </form>
 	</div>
@@ -54,6 +55,11 @@
    		let gen = $("#mem_gen").val();
 	  	var data = {'mem_id': id, 'mem_pw' : pw, 'mem_name' : name, 'mem_email' : email, 'mem_gen' : gen}
    		sendUrl('/member/memberModProc', data);
+	  });
+	  
+	  $("#retire").on("click", function() {
+		 let id = $("#mem_id").val();
+		 location.href='memberDel?id='+id;
 	  });
    </script>
 </body>

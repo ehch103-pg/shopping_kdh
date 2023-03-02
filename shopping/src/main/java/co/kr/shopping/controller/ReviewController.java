@@ -67,21 +67,19 @@ public class ReviewController {
 	@GetMapping("/reviewWrite")
 	public String reviewWrite(@RequestParam(required = false) Map<String, Object> param, Model model) throws Exception {
 		String reviewNo = param.getOrDefault("id", "").toString();
-		
-		Map<String, Object> reviewVo = reviewService.selectReviewDetail(reviewNo);
-		if(reviewVo == null) {
-			model.addAttribute("check", "W");
+		if(reviewNo != null && reviewNo != "") {
+				Map<String, Object> reviewVo = reviewService.selectReviewDetail(reviewNo);			
+				model.addAttribute("check", "M");	
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+				String regDate = reviewVo.getOrDefault("regDate", "").toString();
+				Date parseDate = sdf.parse(regDate);
+				
+				model.addAttribute("id", reviewNo);
+				model.addAttribute("review", reviewVo);
+				model.addAttribute("regDate", parseDate);
 		}else {
-			model.addAttribute("check", "M");
+			model.addAttribute("check", "W");
 		}
-		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		String regDate = reviewVo.getOrDefault("regDate", "").toString();
-		Date parseDate = sdf.parse(regDate);
-		
-		model.addAttribute("id", reviewNo);
-		model.addAttribute("review", reviewVo);
-		model.addAttribute("regDate", parseDate);
 		return "review/reviewWrite";
 	}
 	
@@ -227,6 +225,18 @@ public class ReviewController {
 		model.addAttribute("product_name", reviewVo.getOrDefault("product_name", "").toString());
 		
 		return "review/reviewDetail";
+	}
+	
+	@PostMapping("/checkLock")
+	@ResponseBody
+	public Map<String, Object> checkLock(@RequestBody Map<String, Object> param){
+		Map<String, Object> result = new HashMap<String, Object>();
+		String lock = param.getOrDefault("lock", "").toString();
+		String reviewNo = param.getOrDefault("reviewNo", "").toString();
+		
+		
+		
+		return result;
 	}
 	
 }

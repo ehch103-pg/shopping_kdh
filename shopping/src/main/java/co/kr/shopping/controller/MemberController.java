@@ -25,6 +25,11 @@ public class MemberController {
 	@Autowired
 	MemberService memberService;
 	
+	@GetMapping("/memberReg")
+	public String register() {
+		return "member/memberReg";
+	}
+	
 	@PostMapping("/memberCheck")
 	@ResponseBody
 	public Map<String, Object> checkId(@RequestBody Map<String, Object> param){
@@ -39,6 +44,16 @@ public class MemberController {
 		return result;
 	}
 	
+	@GetMapping("/mypage")
+	public String mypage(Model model, Principal principal) {
+		
+		String mem_id = principal.getName();
+		
+		model.addAttribute("id", mem_id);
+		
+		return "member/mypage";
+	}
+	
 	@PostMapping("/memberReg")
 	@ResponseBody
 	public Map<String, Object> saveMember(@RequestParam Map<String, Object> param) {
@@ -51,8 +66,14 @@ public class MemberController {
 		member.setMemEmail((String)param.get("mem_email"));
 		member.setMemName((String)param.get("mem_name"));
 		member.setMemGen((String)param.get("mem_gen"));
-		memberService.JoinorModifyByMember(member, 1, "U");
-		result.put("result", "S");
+		if(memberService.JoinorModifyByMember(member, 1, "U") != 0) {
+			result.put("result", "S");
+			result.put("msg", "회원가입에 성공하였습니다.");
+			result.put("url", "/login");
+		}else {
+			result.put("result", "F");
+			result.put("msg", "회원가입에 실패하였습니다.");
+		}
 		return result;
 		
 	}
@@ -60,7 +81,6 @@ public class MemberController {
 	@GetMapping("/memberMod")
 	public String modify(Model model, @RequestParam Map<String, Object> param) {
 		String Id = (String)param.getOrDefault("id", "");
-		System.out.println(Id);
 		MemberVO memberVO = memberService.selectMember(Id);
 				
 		model.addAttribute("mem_id", memberVO.getMemId());
@@ -83,27 +103,45 @@ public class MemberController {
 		memberVO.setMemEmail((String)param.getOrDefault("mem_email", ""));
 		memberVO.setMemName((String)param.getOrDefault("mem_name", ""));
 		memberVO.setMemGen((String)param.getOrDefault("mem_gen", ""));
-		memberService.JoinorModifyByMember(memberVO, 2, userCheck);
-		
-		result.put("result", "S");
-		result.put("msg", "회원 정보가 수정되었습니다");
-		result.put("url", "/logout");
+		if(memberService.JoinorModifyByMember(memberVO, 2, userCheck) != 0) {
+			result.put("result", "S");
+			result.put("msg", "회원 정보가 수정되었습니다");
+			result.put("url", "/logout");
+		}else {
+			result.put("msg", "회원 정보 수정에 실패하셨습니다. 다시 입력하시기 바랍니다");
+			result.put("result", "F");
+		}
+	
 		return result;
 	}
 	
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/memberDel")
-	public String delete(Model model) {
+	public String delete(Model model, @RequestParam Map<String, Object> param) {
+		String id = param.getOrDefault("id", "").toString();
+		
+		model.addAttribute("id", id);
 		return "member/memberDel";
 	}
 	
-	@PostMapping
+	@PostMapping("/retireMember")
 	@ResponseBody
 	public Map<String, Object> deleteMember(@RequestBody Map<String, Object> param){
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		String member_Id = (String)param.getOrDefault("Id", "");
-		memberService.deleteMember(member_Id);
+		String member_Pw = (String)param.getOrDefault("Pw", "");
+		
+		MemberVO member = memberService.selectMember(member_Id);
+		
+		if(memberService.deleteMember(member_Id, member_Pw, member) != 0) {
+			result.put("msg", "탈퇴에 성공하셨습니다.");
+			result.put("result", "S");
+			result.put("url", "/logout");
+		}else {
+			result.put("result", "F");
+			result.put("msg", "회원 정보를 잘못 입력하셨습니다");
+		}
 		
 		
 		return result;

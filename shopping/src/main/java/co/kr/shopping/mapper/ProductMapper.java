@@ -12,9 +12,9 @@ import co.kr.shopping.vo.ProductVO;
 @Mapper
 public interface ProductMapper {
 
-	public List<ProductVO> selectProductList(Map<String, Object> param, PaginationVO paging);
+	public List<ProductVO> selectProductList(String keyword, PaginationVO paging);
 	
-	public ProductVO selectProductDetail(@Param("reviewNo") String reviewNo);
+	public ProductVO selectProductDetail(@Param("product_id") String product_id);
 
 	public void insertProduct(ProductVO product);
 }

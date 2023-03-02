@@ -10,12 +10,12 @@ public interface MemberMapper  {
 
 	MemberVO selectMemberInfo(@Param("userID") String userID);
 	
-	void updateMember(MemberVO memberVO);
+	int updateMember(MemberVO memberVO);
 	
-	void insertMember(MemberVO memberVO);
+	int insertMember(MemberVO memberVO);
 
 	int checkMember(@Param("userID") String userId);
 
-	void deleteMember(@Param("userID") String userID);
+	int deleteMember(@Param("userID") String userID);
 
 }

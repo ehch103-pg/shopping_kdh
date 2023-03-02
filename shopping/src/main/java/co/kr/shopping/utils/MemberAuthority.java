@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum MemberAuthority {
 	
-	USER("USER"), ADMIN("ADMIN");
+	USER("USER"), ADMIN("ADMIN"), RETIRE("RETIRE");
 
     private String name;
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="co.kr.shopping.mapper.MemberMapper">
 	<select id="selectMemberInfo" resultType="co.kr.shopping.vo.MemberVO">
@@ -35,7 +36,7 @@
 	<update id="deleteMember" parameterType="string">
 		UPDATE member
 		   SET del_yn = 'Y',
-		   	   del_time = now()
+		   	   del_time = now(),
 		   	   role = 'RETIRE'
 		  WHERE mem_id = #{userID}
 	</update>

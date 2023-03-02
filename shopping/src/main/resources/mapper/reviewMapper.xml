@@ -41,6 +41,7 @@
   		   , A.view_count
   		   , DATE_FORMAT(A.review_write_date, "%Y-%m-%d %H:%i:%s") AS regDate
   		   , A.review_product_Id
+  		   , A.review_lock
   		   , C.product_name
   	  FROM  review  A
   	      , member  B

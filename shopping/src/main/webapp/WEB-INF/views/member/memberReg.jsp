@@ -54,7 +54,6 @@
 		});
 	
 		$("#regBtn").on("click", function() {
-				
 				let form = $("#memFrm").serialize();
 				let url = '/member/memberReg'
 				$.ajax({
@@ -73,7 +72,7 @@
 				   }, error : function(xhr){
 					   console.log(xhr);
 				   }
-				});
+			});
 		});
 	</script>
 </body>

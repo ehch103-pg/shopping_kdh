@@ -19,7 +19,18 @@
 	 <c:forEach var="review" items="${ reviewList }">
 	  <tr>
 	   <td> ${ review.reviewNo } </td>
-	   <td><a href="/review/reviewDetail?id=${ review.reviewNo }"> ${ review.reviewTitle } </a></td>
+	   <td>
+	    <c:choose>
+	     <c:when test="${lock eq 'N' }">
+	   	  <a href="/review/reviewDetail?id=${ review.reviewNo }"> 
+	   	    ${ review.reviewTitle } 
+	      </a>
+	     </c:when>
+	     <c:otherwise>
+	      <a href="/review/reviewLockAlert">${ review.reviewTitle } </a>
+	     </c:otherwise>
+	    </c:choose>
+	   </td>
 	   <td> ${ review.reviewWriter }</td>
 	   <td> ${ review.reviewWriteDate }</td>
 	   <td> ${ review.viewCount }</td>

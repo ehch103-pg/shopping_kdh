@@ -54,8 +54,8 @@ public class WebSecurityConfig {
         .formLogin() // Form Login 설정
             .loginPage("/login")
             .loginProcessingUrl("/loginProc")
-            .defaultSuccessUrl("/")
-            .failureUrl("/login")
+            .successHandler(new CustomSuccessHandler())
+            .failureHandler(new CustomFailureHandler())
             .usernameParameter("username")
             .passwordParameter("password")
         .and()

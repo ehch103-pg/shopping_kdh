@@ -1,7 +1,9 @@
 package co.kr.shopping.controller;
 
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,27 +36,33 @@ public class ProductController {
 	
 	@GetMapping("/productList")
 	public String productList(Model model, @RequestParam(required = false) Map<String, Object> param){
+		String keyword = param.getOrDefault("keyword", "").toString();
 		List<ProductVO> product = new ArrayList<>();
 		PaginationVO paging = new PaginationVO();
-		product = productService.ProductList(paging, param);
-		
-		
-		return rootUrl+"/productList";
+		Map<String, Object> map = new HashMap<>();
+		product = productService.ProductList(keyword, paging);
+		System.out.println(product);
+		model.addAttribute("paging", paging);
+		model.addAttribute("products", product);
+		return rootUrl + "/productList";
 	}
 	
 	@GetMapping("/productDetail")
 	public String productDetail(Model model, @RequestParam Map<String, Object> param) {
 		String productId = param.getOrDefault("productCd", "").toString();
 		
+		ProductVO product = productService.selectProductInfo(productId);
+		
+		model.addAttribute("product", product);
 		model.addAttribute("Id", productId);
 		
-		return rootUrl + "productDetail";
+		return rootUrl + "/productDetail?id="+productId;
 	}
 	
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/productReg")
 	public String productReg(Model model) {
-		
+	
 		return rootUrl + "/productReg";
 	}
 	
@@ -64,5 +72,11 @@ public class ProductController {
 		Map<String, Object> result = new HashMap<String, Object>();
 	
 		return result;
+	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/productDel")
+	public String productDel(Model model) {
+		return rootUrl + "/productRmv";
 	}
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.kr.shopping.mapper.CommonMapper">
+	<select id="selectFile" resultType="map">
+		SELECT   file_origin_name
+			   , file_root
+		  FROM files
+		 WHERE file_seq = #{id}	
+	</select>
+</mapper>

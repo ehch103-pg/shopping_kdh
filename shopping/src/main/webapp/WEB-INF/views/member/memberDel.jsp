@@ -5,21 +5,26 @@
 
 <div class="container">
   <div class="">
-	<span>삭제하시겠습니까? </span>
+	<span>${ id } 님 탈퇴 하시겠습니까? </span>
   </div>
   <div>
-	<input type="password" id="retireId">
-	<button id="submit">탈퇴</button>
-	<button id="cancel">취소</button>
+	<p>아이디 : <input type="text" id="retireId" class="form-control"></p>
+	<p>비밀번호 : <input type="password" id="retirePw" class="form-control"></p>
+  </div>
+  <div align="center">
+	<button id="submit" class="btn btn-primary">탈퇴</button>
+	<button id="cancel" class="btn btn-danger">취소</button>
   </div>
 </div>
 <script type="text/javascript">
-	$("#submit").on("click", function () {
-		let Id ={ 'Id' :  $("#retireId").val(); }
-		sendUrl('/member/deleteMember', Id);
+	$("#submit").on("click", function() {
+		let Id = $('#retireId').val();
+		let Pw = $('#retirePw').val();
+		var data = { 'Id' : Id, 'Pw' : Pw }
+		sendUrl('/member/retireMember', data);
 	});
 	
-	$("#cancel").on("click", function () {
+	$("#cancel").on("click", function() {
 		window.history.back();
 	});
 </script>

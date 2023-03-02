@@ -24,13 +24,20 @@
 	 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	  <div class="container-fluid">
 	   <div class="navbar-header">
-	    <a class="navbar-brand" href="#">홈</a>
+	    <a class="navbar-brand" href="/">홈</a>
 	   </div>
 	   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       	<ul class="nav navbar-nav navbar-right">
-      	 <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">상품</a></li>
-         <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">리뷰</a></li>
-         <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">회원정보</a></li>
+      	 <li class="nav-item"><a class="nav-link active" aria-current="page" href="/product/productList">상품</a></li>
+         <li class="nav-item"><a class="nav-link active" aria-current="page" href="/review/reviewList">리뷰</a></li>
+         <sec:authorize access="isAnonymous()">
+		   <li class="nav-item"><a class="nav-link active" aria-current="page" href="/login">로그인</a></li>
+		   <li class="nav-item"><a class="nav-link active" aria-current="page" href="/member/memberReg">회원 가입</a></li>
+	  	 </sec:authorize>
+	  	 <sec:authorize access="isAuthenticated()">
+	  	   <li class="nav-item"><a class="nav-link active" aria-current="page" href="/member/mypage">회원정보</a></li>
+		   <li class="nav-item"><a class="nav-link active" aria-current="page" href="/logout">로그아웃</a></li>
+      	 </sec:authorize>
       	</ul>
        </div>
 	  </div>

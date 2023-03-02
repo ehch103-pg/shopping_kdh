@@ -11,6 +11,7 @@ function sendUrl(url, data){
 			  location.href=data.url;
 			}else {
 			  alert(data.msg);
+			  location.reload();
 			}
 		}
 		, error : function(xhr){
