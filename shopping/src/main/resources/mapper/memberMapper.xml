@@ -40,4 +40,12 @@
 		   	   role = 'RETIRE'
 		  WHERE mem_id = #{userID}
 	</update>
+	
+	<update id="updateRecoveryMember" parameterType="string">
+		UPDATE  member
+		   SET  del_yn = 'N'
+		      , del_time = NULL
+		      , role = 'USER'
+		 WHERE mem_id = #{userID}
+	</update>
 </mapper>

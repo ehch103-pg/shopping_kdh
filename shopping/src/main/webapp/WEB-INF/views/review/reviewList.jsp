@@ -21,7 +21,7 @@
 	   <td> ${ review.reviewNo } </td>
 	   <td>
 	    <c:choose>
-	     <c:when test="${lock eq 'N' }">
+	     <c:when test="${review.reviewLock eq 'N' }">
 	   	  <a href="/review/reviewDetail?id=${ review.reviewNo }"> 
 	   	    ${ review.reviewTitle } 
 	      </a>

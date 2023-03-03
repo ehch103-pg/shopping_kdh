@@ -52,7 +52,7 @@ public class ReviewController {
 		paging.setTotalRecordCount(reviewService.selectReviewCount(keyword, option));
 		List<ReviewVO> reviewList = new ArrayList<>();
 		reviewList = reviewService.selectReviewList(keyword, option, paging);
-	
+		
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("option", option);
 		model.addAttribute("pageNo", page);
@@ -62,6 +62,11 @@ public class ReviewController {
 		
 		
 		return "review/reviewList";
+	}
+	
+	@GetMapping("/reviewLockAlert")
+	public String reviewLock(Model model) {
+		return "/review/reviewLockAlert";
 	}
 	
 	@GetMapping("/reviewWrite")

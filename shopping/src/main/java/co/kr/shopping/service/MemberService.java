@@ -1,6 +1,7 @@
 package co.kr.shopping.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcWebClientAutoConfiguration;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -57,18 +58,24 @@ public class MemberService implements UserDetailsService{
 		return memberMapper.checkMember(userId);
 	}
 
-	public int deleteMember(String member_Id, String member_Pw, MemberVO member) {
+	public int deleteOrRecoveryMember(String member_Id, String member_Pw
+			, MemberVO member, String type) {
 		// TODO Auto-generated method stub
-		int check;
+		int check = 0;
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		
 		if(passwordEncoder.matches(member_Pw, member.getMemPw())) {
 			check = 1;
-			memberMapper.deleteMember(member_Id);
+			if(type.equals("D")) {
+				memberMapper.deleteMember(member_Id);
+			}else if(type.equals("R")) {
+				memberMapper.updateRecoveryMember(member_Id);
+			}
 		}else {
 			check = 0;
 		}
+		
 		return check;
 	}
-
 
 }

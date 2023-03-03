@@ -77,7 +77,7 @@ public class MemberController {
 		return result;
 		
 	}
-	@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("isAuthenticated() ")
 	@GetMapping("/memberMod")
 	public String modify(Model model, @RequestParam Map<String, Object> param) {
 		String Id = (String)param.getOrDefault("id", "");
@@ -124,6 +124,26 @@ public class MemberController {
 		return "member/memberDel";
 	}
 	
+	@PostMapping("/returnMember")
+	@ResponseBody
+	public Map<String, Object> recoveryMember(@RequestBody Map<String, Object> param){
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		String recoveryId = (String)param.getOrDefault("recoveryId", "");
+		String passwd = (String)param.getOrDefault("passwd", "");
+		MemberVO member = memberService.selectMember(recoveryId);
+		if(memberService.deleteOrRecoveryMember(recoveryId, passwd, member, "R") != 0) {
+			result.put("msg", "회원 권한이 복구되었습니다.");
+			result.put("result", "S");
+			result.put("url", "/logout");
+		}else {
+			result.put("result", "F");
+			result.put("msg", "휴면 회원에서 일반 회원 전환에 실패하였습니다");
+		}
+		
+		return result;
+	}
+	
 	@PostMapping("/retireMember")
 	@ResponseBody
 	public Map<String, Object> deleteMember(@RequestBody Map<String, Object> param){
@@ -134,7 +154,7 @@ public class MemberController {
 		
 		MemberVO member = memberService.selectMember(member_Id);
 		
-		if(memberService.deleteMember(member_Id, member_Pw, member) != 0) {
+		if(memberService.deleteOrRecoveryMember(member_Id, member_Pw, member, "D") != 0) {
 			result.put("msg", "탈퇴에 성공하셨습니다.");
 			result.put("result", "S");
 			result.put("url", "/logout");

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.tomcat.jni.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -51,11 +52,12 @@ public class HomeController {
 	}
 
 	
-	@PostMapping("/imgShow")
-	@ResponseBody
-	public ResponseEntity<byte[]> showImg(@RequestBody Map<String, Object> param){
-		String imgId = param.getOrDefault("imgId", "").toString();
-		List<Map<String, Object>> imgList = commService.searchFile(imgId);
+	@GetMapping("/imgShow")
+	public ResponseEntity<Byte[]> showImg(@RequestParam(value = "imgId") String imgId){
+		
+		Map<String, Object> imgInfo = commService.searchFile(imgId);
+		String fileNm = (String)imgInfo.getOrDefault("file_origin_name", "");
+		
 		return null;
 	}
 	

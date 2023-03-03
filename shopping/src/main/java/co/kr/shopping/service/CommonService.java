@@ -14,7 +14,7 @@ public class CommonService {
 	@Autowired
 	CommonMapper commonMapper;
 	
-	public List<Map<String, Object>> searchFile(String id) {
+	public Map<String, Object> searchFile(String id) {
 		return commonMapper.selectFile(id);
 	}
 	

@@ -18,4 +18,6 @@ public interface MemberMapper  {
 
 	int deleteMember(@Param("userID") String userID);
 
+	int updateRecoveryMember(@Param("userID") String userID);
+
 }

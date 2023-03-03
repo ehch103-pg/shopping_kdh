@@ -9,6 +9,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface CommonMapper {
 
-	public List<Map<String, Object>> selectFile(@Param("id") String id);
+	public Map<String, Object> selectFile(@Param("id") String id);
 
 }

@@ -3,34 +3,35 @@
 
 <mapper namespace="co.kr.shopping.mapper.ReviewMapper">
   <select id="selectReviewList" resultType="co.kr.shopping.vo.ReviewVO">
-  	 SELECT   review_no
-  	        , review_title
-  	        , review_writer
-  	        , review_write_date
-  	        , review_product_Id
-  	        , view_count
-  	 FROM   review
+  	 SELECT   A.review_no
+  	        , A.review_title
+  	        , A.review_writer
+  	        , A.review_lock
+  	        , A.review_write_date
+  	        , A.review_product_Id
+  	        , A.view_count
+  	 FROM    review A
+  	 	   , member B
+  	 WHERE 1=1
   	 <if test="option != null or option != ''">
   	  <if test="option eq 'All'">
-  	  WHERE 
-  	      review_title LIKE CONCAT('%', #{keyword},'%')
-  	      OR review_writer LIKE CONCAT('%', #{keyword},'%')
-  	      OR review_write_date LIKE CONCAT('%', #{keyword},'%')
+  	      AND review_title LIKE CONCAT('%', #{keyword},'%')
+  	      OR  review_writer LIKE CONCAT('%', #{keyword},'%')
+  	      OR  review_write_date LIKE CONCAT('%', #{keyword},'%')
   	  </if>
   	  <if test="option eq 'title'">
-  	  WHERE
-  	  	review_title LIKE CONCAT('%', #{keyword},'%')
+  	  	AND review_title LIKE CONCAT('%', #{keyword},'%')
   	  </if>
   	  <if test="option eq 'writer'">
-  	  WHERE
-  	  	review_writer LIKE CONCAT('%', #{keyword},'%')
+  	  	AND review_writer LIKE CONCAT('%', #{keyword},'%')
   	  </if>
   	  <if test="option eq 'regDate'">
-  	  WHERE
-  	  	review_write_date LIKE CONCAT('%', #{keyword},'%')
+  	  	AND review_write_date LIKE CONCAT('%', #{keyword},'%')
   	  </if>
   	 </if>
-  	 ORDER BY review_no
+  	 AND A.review_writer = B.mem_id
+  	 AND B.role = 'USER'
+  	 ORDER BY review_no DESC
   	 LIMIT #{paging.firstRecordOnPage}, #{paging.recordCountPerPage}
   </select>
   
