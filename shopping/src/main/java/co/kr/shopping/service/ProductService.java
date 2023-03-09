@@ -21,8 +21,8 @@ public class ProductService {
 	}
 	
 	
-	public void ProductRegister(ProductVO product) {
-		productMapper.insertProduct(product);
+	public int ProductRegister(ProductVO product) {
+		return productMapper.insertProduct(product);
 	}
 
 	public ProductVO selectProductInfo(String product_id) {

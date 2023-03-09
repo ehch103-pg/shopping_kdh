@@ -40,6 +40,12 @@
 	  	</select>
 	   </div>	
 	  </div>
+	  <div class="form-group row">
+	   <label for="colFormLabelLg" class="col-sm-3 form-label col-form-label-lg">관리자 가입</label>
+	   <div class="col-sm-8">	
+	    <span>관리자 가입</span><input type="checkbox" name="adminCheck" id="adminCheck"> 
+	   </div>
+	  </div>
 	  <div id="button-area" align="center">
 	  	<input type="button" class="btn btn-primary" id="regBtn" value="가입">
 	  	<input type="reset" class="btn btn-danger" value="취소">
@@ -48,31 +54,24 @@
 	</div>
 	
 	<script>
+		
 		$("#member_check").on("click", function(){
 			var IdVal = $("#mem_id").val();
 			checkId(IdVal);
 		});
 	
 		$("#regBtn").on("click", function() {
-				let form = $("#memFrm").serialize();
+				var data = {
+						'mem_id' : $("#mem_id").val(),
+						'mem_pw' : $("#mem_pw").val(),
+						'mem_email' : $("#mem_email").val(),
+						'mem_name' : $("#mem_name").val(),
+						'mem_gen' : $("#mem_gen option:selected").val(),
+						'adminCheck' : $("#adminCheck").is(":checked")
+				};
 				let url = '/member/memberReg'
-				$.ajax({
-					 type : 'post'
-				   , url  : url	 
-				   , data : form
-				   , cache : false
-				   , success : function(data){
-					   if(data.result == 'S'){
-					       alert('회원가입을 성공하였습니다. 축하드립니다!');
-					   	   location.href='/login';
-					   }else {
-						   alert('기존에 등록된 회원입니다.');
-						   location.reload();
-					   }
-				   }, error : function(xhr){
-					   console.log(xhr);
-				   }
-			});
+				console.log(data);
+				sendUrl(url, data);
 		});
 	</script>
 </body>

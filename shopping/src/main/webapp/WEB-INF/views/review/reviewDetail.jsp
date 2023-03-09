@@ -56,12 +56,14 @@
    	</c:choose>
    </button>
   </c:if>
-   <input type="hidden" value="${ like_check } " id="like_check">
+   <input type="hidden" id="like_check" value="${ like_check }">
+   <input type="hidden" id="loginUser" value="${ check }">
+   <input type="hidden" id="reviewNo" value="${ reviewNo }">
   </div>
 </div>
 
-<input type="hidden" id="loginUser" value="${ check }">
-<input type="hidden" id="reviewNo" value="${ reviewNo }">
+<input type="hidden" id="page" value="${ page }">
+<input type="hidden" id="keyword" value="${ keyword }">
 
 <div class="button-area"> 
 	<button class="btn btn-success" id="go_list">목록</button>
@@ -74,6 +76,9 @@
 	let no = document.getElementById("reviewNo").value;
 	var msg="";
 	$("#go_list").on("click", function(){
+		 var keyword = $("#keyword").val();
+		 var page = $("#page").val();
+		
 		location.href='/review/reviewList';
 	});
 	

@@ -3,7 +3,7 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="co.kr.shopping.mapper.MemberMapper">
-	<select id="selectMemberInfo" resultType="co.kr.shopping.vo.MemberVO">
+	<select id="selectMemberInfo" resultType="MemberVO">
 		SELECT *
 		  FROM member
 		 WHERE mem_id = #{ userID }
@@ -15,14 +15,14 @@
 		 WHERE mem_id = #{ userID }
 	</select>
 	
-	<insert id="insertMember" parameterType="co.kr.shopping.vo.MemberVO">
+	<insert id="insertMember" parameterType="MemberVO">
 		INSERT INTO member
 		(mem_id, mem_pw, mem_email, reg_Date, mem_name, mem_gen, role)
 		VALUES 
 		(#{memId}, #{memPw}, #{memEmail}, now(), #{memName}, #{memGen}, #{role})
 	</insert>
 	
-	<update id="updateMember" parameterType="co.kr.shopping.vo.MemberVO">
+	<update id="updateMember" parameterType="MemberVO">
 		UPDATE member
 		   SET   mem_id = #{memId}
 		       , mem_pw = #{memPw}

@@ -14,7 +14,7 @@ import co.kr.shopping.mapper.MemberMapper;
 import co.kr.shopping.vo.MemberVO;
 
 @Service
-public class MemberService implements UserDetailsService{
+public class MemberService {
 	
 	@Autowired
 	private MemberMapper memberMapper;
@@ -39,18 +39,6 @@ public class MemberService implements UserDetailsService{
 	public MemberVO selectMember(String id) {
 		MemberVO member = memberMapper.selectMemberInfo(id);
 		return member;
-	}
-
-
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		// TODO Auto-generated method stub
-		MemberVO memberVO = memberMapper.selectMemberInfo(username);
-		if(memberVO==null){
-            throw new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다.");
-        }
-		
-		return memberVO;
 	}
 
 	public int checkMember(String userId) {

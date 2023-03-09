@@ -11,4 +11,5 @@ public class ProductVO {
 	private String productIntro;
 	private String productPrice;
 	private String productRegDate;
+	private String fileSeq;
 }

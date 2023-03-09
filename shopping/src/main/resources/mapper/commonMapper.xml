@@ -3,9 +3,26 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="co.kr.shopping.mapper.CommonMapper">
 	<select id="selectFile" resultType="map">
-		SELECT   file_origin_name
+		SELECT file_seq
+			   , file_origin_name
 			   , file_root
 		  FROM files
-		 WHERE file_seq = #{id}	
+		 WHERE file_seq = #{fileSeq}	
 	</select>
+	
+	<insert id="saveFile" parameterType="map">
+		INSERT into files
+		(file_seq, file_cd, file_origin_name, file_conver_name, file_root, reg_user, regDate)
+		VALUES
+		(   
+			#{fileSeq}
+		  , #{fileCd}
+		  , #{fileOldName}
+		  , #{fileNewName}
+		  , #{fileRoot}
+		  , #{regUser}
+		  , now()
+		 )
+	</insert>
+	
 </mapper>

@@ -16,5 +16,5 @@ public interface ProductMapper {
 	
 	public ProductVO selectProductDetail(@Param("product_id") String product_id);
 
-	public void insertProduct(ProductVO product);
+	public int insertProduct(ProductVO product);
 }

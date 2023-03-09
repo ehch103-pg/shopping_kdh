@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="co.kr.shopping.mapper.ProductMapper">
-	<select id="selectProductList" resultType="co.kr.shopping.vo.ProductVO">
+	<select id="selectProductList" resultType="ProductVO">
 		SELECT *
 		  FROM product 
 		<if test="keyword neq null or keyword neq ''">  
@@ -14,16 +14,23 @@
 		LIMIT #{paging.firstRecordOnPage}, #{paging.recordCountPerPage}
 	</select>
 	
-	<insert id="insertProduct" parameterType="map">
-		INSERT 
-		INTO product (product_Id, product_name, product_intro, product_price, product_regDate) 
-		VALUES (#{productId}, #{productName}, #{productIntro}, #{productPrice}, SYSDATE)
+	<insert id="insertProduct" parameterType="ProductVO">
+		INSERT INTO product 
+		(product_Id, product_name, product_intro, product_price, product_regDate, file_seq) 
+		VALUES 
+		(#{productId}, #{productName}, #{productIntro}, #{productPrice}, SYSDATE, #{fileSeq})
 	</insert>
 	
-	<select id="selectProductDetail" resultType="co.kr.shopping.vo.ProductVO">
-		SELECT *
-		  FROM product
-		 WHERE product_id = #{product_id}
+	<select id="selectProductDetail" resultType="ProductVO">
+		SELECT   A.product_id
+			   , A.product_name
+			   , A.product_intro
+			   , A.product_price
+			   , A.product_regDate
+		  FROM   product A
+		       , files B 
+		 WHERE 1=1 
+		   AND A.product_id = #{product_id}
 	</select>
 	
 </mapper>

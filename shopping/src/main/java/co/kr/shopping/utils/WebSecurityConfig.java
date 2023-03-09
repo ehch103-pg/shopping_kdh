@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 public class WebSecurityConfig {
 	
 	@Autowired
-	private MemberService memberService;
+	private userDetailServiceImpl userImpl;
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -49,7 +49,7 @@ public class WebSecurityConfig {
         .antMatchers("/","/login", "/member/memberReg","/loginFail", "/member/memberCheck", "/review/reviewList", "/review/reviewDetail").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN")
         .anyRequest().authenticated();
-
+		
 		httpSecurity
         .formLogin() // Form Login 설정
             .loginPage("/login")
@@ -63,7 +63,6 @@ public class WebSecurityConfig {
             .invalidateHttpSession(true)
         .and()
             .csrf().disable();
-
     return httpSecurity.build();
 	}
 	

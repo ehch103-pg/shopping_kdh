@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import co.kr.shopping.service.MemberService;
+import co.kr.shopping.service.ProductService;
 import co.kr.shopping.service.ReviewService;
 import co.kr.shopping.vo.MemberVO;
 import co.kr.shopping.vo.PaginationVO;
@@ -37,21 +39,30 @@ public class ReviewController {
 	@Autowired
 	MemberService memberService;
 	
+	@Autowired
+	ProductService productService;
+	
 	@GetMapping("/reviewList")
 	public String reviewList(Model model, @RequestParam Map<String, Object> param) {
+		System.out.println(param);
 		PaginationVO paging = new PaginationVO();
 		if(param.get("page") == null || param.get("page").equals("")) {
 			param.put("page", "1");
 		}
 		int page = Integer.parseInt((String) param.get("page"));
+		String keyword = (String)param.getOrDefault("keyword", "");
+		String option = (String)param.getOrDefault("option", "");
+		
 		int firstRecord = (page-1) * 10;
 		paging.setCurrentPageNo(page);
 		paging.setFirstRecordOnPage(firstRecord);
-		String keyword = (String)param.getOrDefault("searchWord", "");
-		String option = (String)param.getOrDefault("option", "");
 		paging.setTotalRecordCount(reviewService.selectReviewCount(keyword, option));
 		List<ReviewVO> reviewList = new ArrayList<>();
 		reviewList = reviewService.selectReviewList(keyword, option, paging);
+		
+		System.out.println("검색어:"+keyword);
+		System.out.println("주제:"+option);
+		System.out.println("페이지:"+page);
 		
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("option", option);
@@ -70,21 +81,31 @@ public class ReviewController {
 	}
 	
 	@GetMapping("/reviewWrite")
-	public String reviewWrite(@RequestParam(required = false) Map<String, Object> param, Model model) throws Exception {
+	public String reviewWrite(@RequestParam(required = false) Map<String, Object> param, Model model, Principal principal) throws Exception {
 		String reviewNo = param.getOrDefault("id", "").toString();
+		String productCd, productNm;
 		if(reviewNo != null && reviewNo != "") {
 				Map<String, Object> reviewVo = reviewService.selectReviewDetail(reviewNo);			
 				model.addAttribute("check", "M");	
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 				String regDate = reviewVo.getOrDefault("regDate", "").toString();
+				productCd = (String)reviewVo.get("review_product_Id");
+				productNm = (String)reviewVo.get("product_name");
 				Date parseDate = sdf.parse(regDate);
-				
-				model.addAttribute("id", reviewNo);
 				model.addAttribute("review", reviewVo);
+				model.addAttribute("product_name", productNm);
 				model.addAttribute("regDate", parseDate);
+				model.addAttribute("productCd", productCd);
 		}else {
+			productCd = (String)param.getOrDefault("productCd", "");
+			productNm = productService.selectProductInfo(productCd).getProductName();
+			System.out.println("제품코드:"+productCd);
+			model.addAttribute("product_name", productNm);
+			model.addAttribute("productCd", productCd);
+			model.addAttribute("writer", principal.getName());
 			model.addAttribute("check", "W");
 		}
+		model.addAttribute("id", reviewNo);
 		return "review/reviewWrite";
 	}
 	
@@ -92,14 +113,13 @@ public class ReviewController {
 	@PostMapping("/regRev")
 	public Map<String, Object> registerReview(@RequestBody Map<String, Object> param){
 		Map<String, Object> result = new HashMap<>();
-		
+		System.out.println(param);
 		ReviewVO reviewVO = new ReviewVO();
 		
 		reviewVO.setReviewTitle(param.getOrDefault("title", "").toString());
 		reviewVO.setReviewWriter(param.getOrDefault("writer", "").toString());
 		reviewVO.setReviewContents(param.getOrDefault("content","").toString());
 		reviewVO.setReviewProductId(param.getOrDefault("product","").toString());
-		reviewVO.setReviewLock(param.getOrDefault("lock","").toString());
 				
 		int check = reviewService.saveReview(reviewVO);
 		
@@ -119,13 +139,12 @@ public class ReviewController {
 	@PostMapping("/modRev")
 	public Map<String, Object> modifyReview(@RequestBody Map<String, Object> param){
 		Map<String, Object> result = new HashMap<>();
-		
+		System.out.println(param);
 		int reviewNo = Integer.parseInt((param.getOrDefault("reviewNo", "").toString()));
 		String review_title = param.getOrDefault("title", "").toString();
 		String review_writer = param.getOrDefault("writer", "").toString();
 		String review_content = param.getOrDefault("content", "").toString();
 		String review_product = param.getOrDefault("product", "").toString();
-		String review_lock = param.getOrDefault("lock", "").toString();
 		
 		ReviewVO reviewVo = new ReviewVO();
 		reviewVo.setReviewNo(reviewNo);
@@ -133,9 +152,8 @@ public class ReviewController {
 		reviewVo.setReviewWriter(review_writer);
 		reviewVo.setReviewContents(review_content);
 		reviewVo.setReviewProductId(review_product);
-		reviewVo.setReviewLock(review_lock);
 	
-		System.out.println(reviewVo.getReviewLock());
+		System.out.println(reviewVo);
 		
 		int check = reviewService.updateReview(reviewVo);
 		
@@ -185,40 +203,39 @@ public class ReviewController {
 			map.put("result", "F");
 		}
 		map.put("like_count", like_count);
-		System.err.println(map);
 		return map;
 	}
 	
 	@GetMapping("/reviewDetail")
-	public String reviewDetail(Model model, @RequestParam(required = false) Map<String, Object> param, Principal principal, HttpServletRequest request) 
-			throws ParseException {
+	public String reviewDetail(Model model, @RequestParam(required = false) Map<String, Object> param
+			, Principal principal, HttpServletRequest request) throws ParseException {
 		int likeCheck;
 		String reviewNo = param.getOrDefault("id", "").toString();
+		
 		reviewService.updateViewCount(reviewNo);
 		Map<String, Object> reviewVo = reviewService.selectReviewDetail(reviewNo);
-
 		String writer = reviewVo.getOrDefault("review_writer", "").toString();
 		int viewCount = Integer.parseInt(reviewVo.getOrDefault("view_count", "").toString());
-		
+			
 		int likeCount = reviewService.likeCount(reviewNo);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		String regDate = reviewVo.getOrDefault("regDate", "").toString();
 		Date parseDate = sdf.parse(regDate);
-		
+			
 		Map<String, Object> map = new HashMap<>();
-		
+			
 		if(principal != null) {
 			MemberVO member =  memberService.selectMember(principal.getName());
 			String content_user = member.getMemId();
 			int user_no = member.getMemSeq();
-		
+				
 			map.put("review_no", reviewNo);
 			map.put("mem_no", user_no);
 			likeCheck = reviewService.likeCheck(map);
 			model.addAttribute("check", content_user);
 			model.addAttribute("like_check", likeCheck);
 		}
-		System.err.println(reviewVo);
+		
 		model.addAttribute("like_count", likeCount);
 		model.addAttribute("view_Count", viewCount);
 		model.addAttribute("reviewNo", reviewNo);
@@ -230,18 +247,6 @@ public class ReviewController {
 		model.addAttribute("product_name", reviewVo.getOrDefault("product_name", "").toString());
 		
 		return "review/reviewDetail";
-	}
-	
-	@PostMapping("/checkLock")
-	@ResponseBody
-	public Map<String, Object> checkLock(@RequestBody Map<String, Object> param){
-		Map<String, Object> result = new HashMap<String, Object>();
-		String lock = param.getOrDefault("lock", "").toString();
-		String reviewNo = param.getOrDefault("reviewNo", "").toString();
-		
-		
-		
-		return result;
 	}
 	
 }

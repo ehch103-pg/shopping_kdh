@@ -56,17 +56,25 @@ public class MemberController {
 	
 	@PostMapping("/memberReg")
 	@ResponseBody
-	public Map<String, Object> saveMember(@RequestParam Map<String, Object> param) {
+	public Map<String, Object> saveMember(@RequestBody Map<String, Object> param) {
 		String id = (String)param.get("mem_id");
+		String role;
 		Map<String, Object> result = new HashMap<>();
+		boolean adminCheck = (boolean) param.get("adminCheck");
 		
+		if(adminCheck == false) {
+			role = "U";
+		}else {
+			role = "A";
+		}
 		MemberVO member = new MemberVO();
 		member.setMemId(id);
 		member.setMemPw((String)param.get("mem_pw"));
 		member.setMemEmail((String)param.get("mem_email"));
 		member.setMemName((String)param.get("mem_name"));
 		member.setMemGen((String)param.get("mem_gen"));
-		if(memberService.JoinorModifyByMember(member, 1, "U") != 0) {
+	
+		if(memberService.JoinorModifyByMember(member, 1, role) != 0) {
 			result.put("result", "S");
 			result.put("msg", "회원가입에 성공하였습니다.");
 			result.put("url", "/login");

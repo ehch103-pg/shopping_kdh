@@ -50,15 +50,5 @@ public class HomeController {
 		model.addAttribute("Id", id);
 		return "retire/retirePage";
 	}
-
-	
-	@GetMapping("/imgShow")
-	public ResponseEntity<Byte[]> showImg(@RequestParam(value = "imgId") String imgId){
-		
-		Map<String, Object> imgInfo = commService.searchFile(imgId);
-		String fileNm = (String)imgInfo.getOrDefault("file_origin_name", "");
-		
-		return null;
-	}
 	
 }

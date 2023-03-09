@@ -4,14 +4,24 @@
 <%@ include file="../include/header.jsp" %>
 
 <div class="container">
-  <div class="product-list">
-   <c:forEach var="products" items="${ products }">
-  	 <a href="/product/productDetail?id=${ products.productId }">
-  	   <img src="${ pageContext.request.contextPath }/imgShow?imgId=${ imgId }">
-  	   <span>${ products.productName }</span>
-  	 </a>
-   </c:forEach>
-  </div>
+
+    <div class="module-body">
+    <ul class="product-list">
+      <c:forEach var="products" items="${ products }">
+       <li>
+  	    <div class="product_thumbnail">
+  	     <a href="/product/productDetail?id=${ products.productId }">
+  	      <img src="${ pageContext.request.contextPath }/imgShow?imgSeq=${ products.fileSeq }">
+  	     </a>
+  	    </div>
+  	    <div class="product_content">
+  	     <div class="product_name">${ products.productName }</div>
+  	     <div class="product_price">${ products.productPrice }</div>
+  	    </div>
+  	   </li>
+      </c:forEach>
+    </ul>
+   </div>
    <div id="pagination-field" class="text-center">
    <nav>
     <ul class="pagination">
@@ -40,7 +50,7 @@
    </nav>
   </div>
   <sec:authorize access="hasRole('ADMIN')">
-   <button id="productReg">제품 등록</button>
+   <button id="productReg" class="btn btn-success">상품 등록</button>
   </sec:authorize>
 </div>
 <script type="text/javascript">

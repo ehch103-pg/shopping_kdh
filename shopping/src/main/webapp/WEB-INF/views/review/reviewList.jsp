@@ -18,28 +18,21 @@
     <c:when test="${ size > 0}">
 	 <c:forEach var="review" items="${ reviewList }">
 	  <tr>
-	   <td> ${ review.reviewNo } </td>
-	   <td>
-	    <c:choose>
-	     <c:when test="${review.reviewLock eq 'N' }">
-	   	  <a href="/review/reviewDetail?id=${ review.reviewNo }"> 
-	   	    ${ review.reviewTitle } 
-	      </a>
-	     </c:when>
-	     <c:otherwise>
-	      <a href="/review/reviewLockAlert">${ review.reviewTitle } </a>
-	     </c:otherwise>
-	    </c:choose>
-	   </td>
-	   <td> ${ review.reviewWriter }</td>
-	   <td> ${ review.reviewWriteDate }</td>
-	   <td> ${ review.viewCount }</td>
+	   <th scope="row"> ${ review.reviewNo } </th>
+	   <th>
+	    <a href="/review/reviewDetail?id=${ review.reviewNo }"> 
+	   	  ${ review.reviewTitle } 
+	    </a>
+	   </th>
+	   <th> ${ review.reviewWriter }</th>
+	   <th> ${ review.reviewWriteDate }</th>
+	   <th> ${ review.viewCount }</th>
 	  </tr> 
 	 </c:forEach>
    	</c:when>
    	<c:otherwise>
    	 <tr>
-      <td>게시물이 존재하지 않습니다.</td>
+      <td align="right">게시물이 존재하지 않습니다.</td>
      </tr>
    	</c:otherwise>
    </c:choose>
@@ -55,14 +48,12 @@
   	  	<option value="writer" <c:if test="${ option eq 'writer' }"> selected </c:if>>작성자</option>
   	  	<option value="regDate" <c:if test="${ option eq 'regDate' }"> selected </c:if>>작성일</option> 
   	  </select>
-  	   
   	   <input type="text" id="keyword" name="keyword" value="${ keyword }"> 
   	   <input type="button" id="search" class="btn float-left" value="검색" onclick="searchKeyword();">
-  	   <form id="searchForm" name="searchForm" method="get">
-  	  
+  	   <form id="searchForm" name="searchForm">
   	  </form>
   	 </div>
-   	 <div class="col-md-4"><input type="button" id="review_write" class="btn float-right" value="리뷰 글 쓰기"></div>
+   	 <div class="col-md-4" align="right"><input type="button" id="review_write" class="btn float-right" value="리뷰 글 쓰기"></div>
     </div>
    </div>
   </div>
@@ -98,22 +89,25 @@
  
  	function onLoadList(pageVal){
  		let keyword = document.getElementById('keyword');
- 		let searchType = $("#searchType option:selected").val();
+ 		let searchTypeVal = $("#searchType option:selected").val();
  		let page = document.createElement('input');
  		page.setAttribute('type', 'hidden');
  		page.setAttribute('value', pageVal);
  		page.setAttribute('name', 'page');
+ 		var searchType = document.createElement('input');
+ 		searchType.setAttribute('type', 'hidden');
+ 		searchType.setAttribute('value', searchTypeVal);
+ 		searchType.setAttribute('name', 'option');
  		
- 		let form = $("#searchForm");
- 		form.append(keyword);
- 		form.append(searchType);
- 		form.append(page);
- 		form.submit();
+ 		var searchForm = document.getElementById('searchForm');
+ 		searchForm.action = '/review/reviewList';
+ 		searchForm.method = 'get';
+ 		searchForm.append(keyword);
+ 		searchForm.append(searchType);
+ 		searchForm.append(page);
+ 		
+ 		searchForm.submit();
  	}
- 	
- 	$("#review_write").on("click", function(){
- 		location.href='/review/reviewWrite';
- 	});
  	
  	$("#keyword").keydown(function(key){
  		if(key.keyCode == 13){
@@ -132,7 +126,7 @@
  		var keyword = document.createElement('input');
  		keyword.setAttribute('type', 'hidden');
  		keyword.setAttribute('value', keywordVal);
- 		keyword.setAttribute('name', 'searchWord');
+ 		keyword.setAttribute('name', 'keyword');
  		
  		let searchForm = document.getElementById('searchForm');
  		searchForm.append(keyword);
