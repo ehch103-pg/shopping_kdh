@@ -22,16 +22,20 @@ public class MemberService {
 	@Transactional
 	public int JoinorModifyByMember(MemberVO memberVO, int code, String userCheck) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		memberVO.setMemPw(passwordEncoder.encode(memberVO.getMemPw()));
-		memberVO.setChId(memberVO.getMemId());
 		if(code == 1) {
 			if(userCheck == "A") {
-				memberVO.setRole("ADMIN");
+				memberVO.setMemPw(passwordEncoder.encode(memberVO.getMemPw()));
+				memberVO.setRole("ROLE_ADMIN");
 			}else {
-				memberVO.setRole("USER");
+				memberVO.setMemPw(passwordEncoder.encode(memberVO.getMemPw()));
+				memberVO.setRole("ROLE_USER");
 			}
 		    return memberMapper.insertMember(memberVO);
-		}else {
+		}else{
+			if(!memberVO.getMemPw().equals("N")) {
+				memberVO.setMemPw(passwordEncoder.encode(memberVO.getMemPw()));
+			}
+			System.out.println(memberVO);
 			return memberMapper.updateMember(memberVO);
 		}
 	}

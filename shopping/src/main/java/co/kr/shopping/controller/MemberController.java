@@ -104,10 +104,12 @@ public class MemberController {
 	public Map<String, Object> changeMember(@RequestBody Map<String, Object> param){
 		Map<String, Object> result = new HashMap<String, Object>();
 		String member_Id = param.getOrDefault("mem_id", "").toString();
+		String member_Pw = (String)param.getOrDefault("mem_pw", "");
 		String userCheck = memberService.selectMember(member_Id).getRole();
 		MemberVO memberVO = new MemberVO();
 		memberVO.setMemId(member_Id);
-		memberVO.setMemPw((String)param.getOrDefault("mem_pw", ""));
+		memberVO.setMemPw(member_Pw);
+		System.out.println("비밀번호:"+memberVO.getMemPw());
 		memberVO.setMemEmail((String)param.getOrDefault("mem_email", ""));
 		memberVO.setMemName((String)param.getOrDefault("mem_name", ""));
 		memberVO.setMemGen((String)param.getOrDefault("mem_gen", ""));

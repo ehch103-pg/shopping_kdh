@@ -2,7 +2,14 @@
     pageEncoding="UTF-8"%>
 <%@ include file="include/header.jsp" %>
 
-  <div>
+  <div class="container">
+   <div>
+     <c:if test="${ error eq true }">
+		<span class="alert alert-danger">
+			${exception }
+		</span>
+	 </c:if>
+	</div>
    <form name="loginFrm" action="/loginProc" method="post" class="form-signin">
 	<div class="form-group">
 	  <div class="mb-3">

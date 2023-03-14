@@ -6,7 +6,7 @@
 <div class="container">
    <form id="productFrm" name="productFrm" enctype="multipart/form-data">
      <table class="table">
-       <thead align="center">
+       <thead>
         <tr>
          <th colspan="10">
           <c:choose>
@@ -22,14 +22,18 @@
        </thead>
        <tbody>
         <tr>
+         <td><label>상품 썸네일</label></td>
+         <td><input class="form-control" type="file" id="productThumb" onchange="fileExpChecker('img', this.value);"></td> 
+        </tr>
+        <tr>
          <td><label>상품 종류</label></td>
          <td>
           <select id="productType" class="form-control">
-         	<option value="food">음식</option>
-         	<option value="kitchen">주방</option>
-         	<option value="bathroom">욕실·화장실</option>
-         	<option value="book">서책</option>
-         	<option value="engineer">공구</option>
+            <option value="B01">서책</option>
+         	<option value="F01">음식</option>
+         	<option value="G02">주방</option>
+         	<option value="G03">욕실·화장실</option>
+         	<option value="G04">공구</option>
           </select>
          </td>
         </tr>
@@ -43,7 +47,7 @@
         </tr>
         <tr>
           <td><label>상품소개</label></td>
-          <td><textarea id="product_intro" rows="40" cols="120"></textarea></td>
+          <td><textarea name="contents" class="form-control" id="contents"></textarea></td>
         </tr>
         <tr>
           <td><label>등록일</label></td>
@@ -66,8 +70,14 @@
    </form>
 </div>
 
-<script type="text/javascript">
+<script>
   var Btn = document.querySelector('button').id;
+  $(function () {
+		CKEDITOR.replace('contents', {
+			filebrowserUploadUrl : '${pageContext.request.contextPath}/UploadFile'
+		});
+  });
+ 
   $("#"+Btn).on("click", function(){
 	 
 	 let cd; 
@@ -77,7 +87,13 @@
 	 }else {
 		cd = 'M';
 	 }
-	 let data = {};
+	 
+	 var name = document.getElementById('product_Nm').value;
+	 var price = document.getElementById('product_price').value;
+	 var kind = $("#productType option:selected").val();
+	 var content = CKEDITOR.instances.contents.getData();
+	 let data = { 'product_Nm' : name, 'product_price' : price, 'product_kind' : kind, 'product_intro' : content };
+	 
 	 sendUrl(url, data);
   });
 </script>

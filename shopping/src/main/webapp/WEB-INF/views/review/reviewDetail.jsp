@@ -67,8 +67,9 @@
 
 <div class="button-area"> 
 	<button class="btn btn-success" id="go_list">목록</button>
-	<c:if test="${ check eq writer }">
+	<c:if test="${ check eq writer or role eq 'ROLE_ADMIN'}">
 		<button id="go_modify" class="btn btn-warning">수정</button>
+		<button id="removeReview" class="btn btn-danger">삭제</button>
 	</c:if>
 </div>
 
@@ -100,6 +101,10 @@
 			likeChange(data);
 		}
 	});
+	
+	$("#removeReview").on("click", function(){
+		location.href='/review/reviewDel';
+	})
 </script>
 
 

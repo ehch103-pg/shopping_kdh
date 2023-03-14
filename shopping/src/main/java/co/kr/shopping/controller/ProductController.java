@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -67,9 +68,9 @@ public class ProductController {
 		ProductVO product =  productService.selectProductInfo(productId);
 		String button;
 		if(product == null) {
-			button = "<button class='btn btn-success' id='regBtn'>가입</button>";
+			button = "<button class='btn btn-success' id='regBtn'> 등록 </button>";
 		}else {
-			button = "<button class='btn btn-warning' id='modBtn'> 수정</button>";
+			button = "<button class='btn btn-warning' id='modBtn'> 수정 </button>";
 		}
 		
 		model.addAttribute("Btn", button);
@@ -78,31 +79,14 @@ public class ProductController {
 	
 	@PostMapping("/productUpload")
 	@ResponseBody
-	public Map<String, Object> productUpload(@RequestParam(required = false) MultipartFile files
-			, @RequestParam Map<String, Object> param, Model model) {
+	public Map<String, Object> productUpload(@RequestParam Map<String, Object> param, Model model) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		
-		String fileName = files.getOriginalFilename();
-		String fileType = fileName.substring(fileName.lastIndexOf(".")+1);
-		String filePath;
-		
-		if(fileType.equals("jpg") || fileType.equals("png") || fileType.equals("gif")) {
-			filePath = "C:\\upload\\image";
-		}else if(fileType.equals("mp4") || fileType.equals("wav")){
-			filePath = "C:\\upload\\video";
-		}else {
-			filePath = "C:\\upload\\etc";
-		}
-		File file = new File(filePath);
-		
-		if(!file.exists()) {
-			file.mkdir();
-		}
 		
 		ProductVO product = new ProductVO();
 		product.setProductName(param.get("product_Nm").toString());
 		product.setProductPrice(param.get("product_price").toString());
 		product.setProductIntro(param.get("product_intro").toString());
+		product.setProductId(param.get("product_kind").toString());
 		int check = productService.ProductRegister(product);
 		if(check == 0) {
 			result.put("result", "F");

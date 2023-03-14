@@ -53,7 +53,11 @@
    		let email = $("#mem_email").val();
    		let name = $("#mem_name").val();
    		let gen = $("#mem_gen").val();
-	  	var data = {'mem_id': id, 'mem_pw' : pw, 'mem_name' : name, 'mem_email' : email, 'mem_gen' : gen}
+	  	if(pw == '' || pw == null){
+	  		pw = 'N';
+	  	}
+	  	console.log("비밀번호: ", pw);
+   		var data = {'mem_id': id, 'mem_pw' : pw, 'mem_name' : name, 'mem_email' : email, 'mem_gen' : gen}
    		sendUrl('/member/memberModProc', data);
 	  });
 	  

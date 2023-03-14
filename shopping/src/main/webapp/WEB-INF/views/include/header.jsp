@@ -20,6 +20,7 @@
  	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
 	<script src="${pageContext.request.contextPath}/js/custom.js"></script>
+	<script src="https://cdn.ckeditor.com/4.19.0/full/ckeditor.js"></script>
 	<header>
 	 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	  <div class="container-fluid">

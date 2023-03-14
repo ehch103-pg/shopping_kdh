@@ -53,7 +53,6 @@
   	   <form id="searchForm" name="searchForm">
   	  </form>
   	 </div>
-   	 <div class="col-md-4" align="right"><input type="button" id="review_write" class="btn float-right" value="리뷰 글 쓰기"></div>
     </div>
    </div>
   </div>

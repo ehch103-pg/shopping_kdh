@@ -51,7 +51,7 @@
    </tr>
    <tr>
     <td><label>리뷰 내용 </label></td>
-    <td><textarea id="review_content" rows="40" cols="120">${ review.review_content }</textarea></td>
+    <td><textarea id="review_content" name="review_content">${ review.review_content }</textarea></td>
    </tr>
    <tr>
     <td><label>상품명 </label></td>
@@ -74,10 +74,14 @@
   </div>
 </div>
 <script type="text/javascript">
+	$(function () {
+		CKEDITOR.replace('review_content');
+		filebrowserUploadUrl : '${pageContext.request.contextPath}/UploadFile'
+	});
     function saveOrModify(url){
 	  let title = $("#title").val();
 	  let writer = document.getElementById("writer").innerHTML;
-	  let content = document.getElementById("review_content").innerText;
+	  let content = CKEDITOR.instances.review_content.getData();
 	  let product = document.getElementById("productCd").value;
 	  console.log(product);
 	  let reviewNo = $("#review_No").val();

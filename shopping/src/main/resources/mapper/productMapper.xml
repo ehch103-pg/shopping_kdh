@@ -15,10 +15,22 @@
 	</select>
 	
 	<insert id="insertProduct" parameterType="ProductVO">
-		INSERT INTO product 
-		(product_Id, product_name, product_intro, product_price, product_regDate, file_seq) 
-		VALUES 
-		(#{productId}, #{productName}, #{productIntro}, #{productPrice}, SYSDATE, #{fileSeq})
+		INSERT INTO product (
+		    product_Id
+		  , product_name
+		  , product_intro
+		  , product_price
+		  , product_regDate
+		  , file_seq
+		) 
+		VALUES ( 
+		  #{productId}
+		, #{productName}
+		, #{productIntro}
+		, #{productPrice}
+		, now()
+		, #{fileSeq}
+		)
 	</insert>
 	
 	<select id="selectProductDetail" resultType="ProductVO">
@@ -28,9 +40,12 @@
 			   , A.product_price
 			   , A.product_regDate
 		  FROM   product A
-		       , files B 
+		       , files B
+		       , category C 
 		 WHERE 1=1 
 		   AND A.product_id = #{product_id}
+		   AND A.file_seq = B.file_seq
+		   AND A.product_id = C.category_id
 	</select>
 	
 </mapper>

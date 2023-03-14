@@ -227,12 +227,14 @@ public class ReviewController {
 		if(principal != null) {
 			MemberVO member =  memberService.selectMember(principal.getName());
 			String content_user = member.getMemId();
+			String user_role = member.getRole();
 			int user_no = member.getMemSeq();
 				
 			map.put("review_no", reviewNo);
 			map.put("mem_no", user_no);
 			likeCheck = reviewService.likeCheck(map);
 			model.addAttribute("check", content_user);
+			model.addAttribute("role", user_role);
 			model.addAttribute("like_check", likeCheck);
 		}
 		

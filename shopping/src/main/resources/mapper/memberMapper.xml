@@ -25,7 +25,9 @@
 	<update id="updateMember" parameterType="MemberVO">
 		UPDATE member
 		   SET   mem_id = #{memId}
+		   <if test='memPw != "N"'>
 		       , mem_pw = #{memPw}
+		   </if>
 		       , mem_email = #{memEmail}
 		       , ch_date = now()
 		       , mem_name = #{memName}

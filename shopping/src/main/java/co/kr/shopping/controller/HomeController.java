@@ -39,7 +39,15 @@ public class HomeController {
 	}
 	
 	@GetMapping("/login")
-	public String login(Model model) {
+	public String login(Model model, @RequestParam(value = "error", required = false)String error,
+			@RequestParam(value = "exception", required = false)String exception, HttpServletRequest request) {
+		
+		String url = request.getHeader("Referer");
+		if(url != null && !url.contains("/login"))
+			request.getSession().setAttribute("prevPage", url);
+		System.out.println(url);
+		model.addAttribute("error", error);
+		model.addAttribute("exception", exception);
 		return "login";
 	}
 	

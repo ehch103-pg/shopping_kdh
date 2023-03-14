@@ -31,7 +31,11 @@ function checkPassword(data){
 	}
 }
 
-function fileExpChecker(expcd, fileExp){
+function fileExpChecker(expcd, fileVal){
+	var dot = fileVal.lastIndexOf(".");
+	var length = fileVal.length;
+	var fileExp = fileVal.substring(dot+1, length);
+	
 	if(expcd != fileExp){
 		alert('허용된 확장자가 아닙니다.');
 		return false;
@@ -65,7 +69,6 @@ function checkId(data){
 		}
 	});
 }
-
 
 
 function likeChange(data){

@@ -33,8 +33,8 @@ public class CustomFailureHandler extends SimpleUrlAuthenticationFailureHandler 
 		} else {
 			errorMsg = "알 수 없는 이유로 로그인 실패하였습니다 관리자에게 문의 바랍니다";
 		}
-		System.out.println(errorMsg);
-		setDefaultFailureUrl("/login");
+		errorMsg = URLEncoder.encode(errorMsg, "UTF-8");
+		setDefaultFailureUrl("/login?error=true&exception="+errorMsg);
 		
 		super.onAuthenticationFailure(request, response, exception);
 	}
