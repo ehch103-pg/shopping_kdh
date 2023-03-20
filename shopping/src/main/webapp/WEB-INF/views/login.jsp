@@ -10,7 +10,7 @@
 		</span>
 	 </c:if>
 	</div>
-   <form name="loginFrm" action="/loginProc" method="post" class="form-signin">
+   <form id="loginFrm" name="loginFrm" action="/loginProc" method="post" class="form-signin">
 	<div class="form-group">
 	  <div class="mb-3">
 		<label class="class-label-wrapper">아이디: </label>

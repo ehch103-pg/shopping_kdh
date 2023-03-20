@@ -45,7 +45,6 @@ public class HomeController {
 		String url = request.getHeader("Referer");
 		if(url != null && !url.contains("/login"))
 			request.getSession().setAttribute("prevPage", url);
-		System.out.println(url);
 		model.addAttribute("error", error);
 		model.addAttribute("exception", exception);
 		return "login";

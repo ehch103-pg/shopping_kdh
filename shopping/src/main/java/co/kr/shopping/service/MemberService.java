@@ -35,7 +35,7 @@ public class MemberService {
 			if(!memberVO.getMemPw().equals("N")) {
 				memberVO.setMemPw(passwordEncoder.encode(memberVO.getMemPw()));
 			}
-			System.out.println(memberVO);
+			
 			return memberMapper.updateMember(memberVO);
 		}
 	}

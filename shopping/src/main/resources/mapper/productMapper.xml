@@ -44,7 +44,6 @@
 		       , category C 
 		 WHERE 1=1 
 		   AND A.product_id = #{product_id}
-		   AND A.file_seq = B.file_seq
 		   AND A.product_id = C.category_id
 	</select>
 	

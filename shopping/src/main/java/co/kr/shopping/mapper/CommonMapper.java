@@ -6,12 +6,18 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import co.kr.shopping.vo.FilesVO;
+
 @Mapper
 public interface CommonMapper {
 
 	public Map<String, Object> selectFile(@Param("fileSeq") String fileSeq, @Param("fileCd") String fileCd);
 
-	public int saveFile(Map<String, Object> param);
+	public String findMaxId(@Param("today") String today);
 	
-	public int modifyFile(Map<String, Object> param);
+	public void saveFile(FilesVO filesvo);
+	
+	public void modifyFile(Map<String, Object> param);
+	
+	public void deleteFile(Map<String, Object> param);
 }

@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -29,64 +30,62 @@ import net.minidev.json.JSONObject;
 @Controller
 public class CommonController {
 	
+	
 	@Autowired
 	CommonService commService;
 	
+	
 	@GetMapping("/imgShow")
-	public ResponseEntity<Byte[]> showImg(@RequestParam(value = "imgseq") String imgSeq){
+	public void showImg(@RequestParam(value = "uid") String uid, HttpServletRequest request, HttpServletResponse response){
 		
-		Map<String, Object> imgInfo = commService.searchFile(imgSeq, "img");
+		Map<String, Object> imgInfo = commService.searchFile(uid, "img");
 		String fileNm = (String)imgInfo.getOrDefault("file_origin_name", "");
 		String fileroot = (String)imgInfo.get("file_root").toString();
 		File file = new File(fileroot);
 		
-		
-		return new ResponseEntity<>(null);
 	}
 	
 	@PostMapping("/UploadFile")
-	@ResponseBody
-	public Map<String, Object> uploadFile(HttpServletRequest request, HttpServletResponse response
-			,MultipartHttpServletRequest multiFile , @RequestParam MultipartFile files){
-		UUID uid = UUID.randomUUID();
-		
+	public void uploadFile(@RequestParam("upload") MultipartFile files, Principal principal
+			, HttpServletRequest request, HttpServletResponse response){
+		Map<String, Object> result = new HashMap<String, Object>();
+		String uploader = principal.getName();
+		OutputStream output = null;
 		PrintWriter printWriter = null;
-		OutputStream outputStream = null;
-		
 		response.setCharacterEncoding("utf-8");
-	    response.setContentType("text/html;charset=utf-8");
-		
+		response.setContentType("text/html; charset=utf-8");
 		try {
 			
-			String fileName = files.getOriginalFilename();
 			byte[] bytes = files.getBytes();
-			String filePath = "";
-			String fileCd = FilenameUtils.getExtension(fileName);
-			if(fileCd.equals("jpg") || fileCd.equals("gif") || fileCd.equals("png")) {
-				filePath = "C://upload//image";
-			}else if(fileCd.equals("mp4") || fileCd.equals("avi") || fileCd.equals("wav")) {
-				filePath = "C://upload//video";
-			}else {
-				filePath = "C://upload//etc";
-			}
-			String ckUploadPath = filePath + uid + "_" + fileName;
-			File file = new File(filePath);
-			
-			if(!file.exists()) {
-				file.mkdir();
-			}
-			outputStream = new FileOutputStream(new File(ckUploadPath));
-			outputStream.write(bytes);
-			outputStream.flush();
-			
+			Map<String, Object> map = commService.saveFile(files, uploader);
+			String filePath = map.get("filePath").toString();
+			String fileType = map.get("fileType").toString();
+			String fileSeq = map.get("fileSeq").toString();
+			String fileCd = map.get("fileCd").toString();
+			output = new FileOutputStream(filePath);
+			output.write(bytes);
+			output.flush();
+			printWriter = response.getWriter();
 			String callback = request.getParameter("CKEditorFuncNum");
-            printWriter = response.getWriter();
-            String fileUrl = "";
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			String fileUrl= commService.searchFile(fileSeq, fileCd).get("file_root").toString();
+			printWriter.println("<script type='text/javascript'>"
+                    + "window.parent.CKEDITOR.tools.callFunction("
+                    + callback+",'"+ fileUrl+"','이미지를 업로드하였습니다.')"
+                    +"</script>");
+			printWriter.flush();
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+                if(output != null) { 
+                	output.close(); 
+                }
+                if(printWriter != null) { 
+                	printWriter.close(); 
+                }
+            } catch(IOException e) { 
+            	e.printStackTrace(); 
+            }
 		}
-		return null;
 	}
 }

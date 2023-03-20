@@ -7,18 +7,23 @@
 			   , file_origin_name
 			   , file_root
 		  FROM files
-		 WHERE file_seq = #{fileSeq}	
+		 WHERE file_seq = #{fileSeq}
+		   AND filecd = #{fileCd}
 	</select>
 	
-	<insert id="saveFile" parameterType="map">
+	<select id="findMaxId" resultType="string">
+			SELECT CONCAT(#{today}, LPAD(IFNULL(MAX(file_seq),0)+1, 5, '0'))
+			FROM files 
+	</select>
+	
+	<insert id="saveFile" parameterType="FilesVO">
 		INSERT into files
-		(file_seq, file_cd, file_origin_name, file_conver_name, file_root, reg_user, regDate)
+		(file_seq, file_cd, file_origin_name, file_root, reg_user, regDate)
 		VALUES
 		(   
 			#{fileSeq}
 		  , #{fileCd}
-		  , #{fileOldName}
-		  , #{fileNewName}
+		  , #{fileName}
 		  , #{fileRoot}
 		  , #{regUser}
 		  , now()

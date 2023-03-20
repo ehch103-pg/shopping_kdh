@@ -44,7 +44,7 @@ public class ReviewController {
 	
 	@GetMapping("/reviewList")
 	public String reviewList(Model model, @RequestParam Map<String, Object> param) {
-		System.out.println(param);
+		
 		PaginationVO paging = new PaginationVO();
 		if(param.get("page") == null || param.get("page").equals("")) {
 			param.put("page", "1");
@@ -59,10 +59,6 @@ public class ReviewController {
 		paging.setTotalRecordCount(reviewService.selectReviewCount(keyword, option));
 		List<ReviewVO> reviewList = new ArrayList<>();
 		reviewList = reviewService.selectReviewList(keyword, option, paging);
-		
-		System.out.println("검색어:"+keyword);
-		System.out.println("주제:"+option);
-		System.out.println("페이지:"+page);
 		
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("option", option);
@@ -85,13 +81,13 @@ public class ReviewController {
 		String reviewNo = param.getOrDefault("id", "").toString();
 		String productCd, productNm;
 		if(reviewNo != null && reviewNo != "") {
-				Map<String, Object> reviewVo = reviewService.selectReviewDetail(reviewNo);			
-				model.addAttribute("check", "M");	
+				Map<String, Object> reviewVo = reviewService.selectReviewDetail(reviewNo);				
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 				String regDate = reviewVo.getOrDefault("regDate", "").toString();
 				productCd = (String)reviewVo.get("review_product_Id");
 				productNm = (String)reviewVo.get("product_name");
 				Date parseDate = sdf.parse(regDate);
+				model.addAttribute("check", "M");
 				model.addAttribute("review", reviewVo);
 				model.addAttribute("product_name", productNm);
 				model.addAttribute("regDate", parseDate);
@@ -99,7 +95,6 @@ public class ReviewController {
 		}else {
 			productCd = (String)param.getOrDefault("productCd", "");
 			productNm = productService.selectProductInfo(productCd).getProductName();
-			System.out.println("제품코드:"+productCd);
 			model.addAttribute("product_name", productNm);
 			model.addAttribute("productCd", productCd);
 			model.addAttribute("writer", principal.getName());
@@ -113,7 +108,6 @@ public class ReviewController {
 	@PostMapping("/regRev")
 	public Map<String, Object> registerReview(@RequestBody Map<String, Object> param){
 		Map<String, Object> result = new HashMap<>();
-		System.out.println(param);
 		ReviewVO reviewVO = new ReviewVO();
 		
 		reviewVO.setReviewTitle(param.getOrDefault("title", "").toString());
@@ -139,7 +133,6 @@ public class ReviewController {
 	@PostMapping("/modRev")
 	public Map<String, Object> modifyReview(@RequestBody Map<String, Object> param){
 		Map<String, Object> result = new HashMap<>();
-		System.out.println(param);
 		int reviewNo = Integer.parseInt((param.getOrDefault("reviewNo", "").toString()));
 		String review_title = param.getOrDefault("title", "").toString();
 		String review_writer = param.getOrDefault("writer", "").toString();
@@ -153,8 +146,6 @@ public class ReviewController {
 		reviewVo.setReviewContents(review_content);
 		reviewVo.setReviewProductId(review_product);
 	
-		System.out.println(reviewVo);
-		
 		int check = reviewService.updateReview(reviewVo);
 		
 		
